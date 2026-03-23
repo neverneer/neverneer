@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>neverneer — build free. stay sharp.</title>
+  <meta name="description" content="Free tools, open source guides, and alternatives to paid software. Built by neverneer." />
+  <meta property="og:title" content="neverneer" />
+  <meta property="og:description" content="Free tools over paid bloat. Knowledge shared is power multiplied." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================
+       CSS VARIABLES — DARK SYSTEM
+    ============================ */
+    :root {
+      --bg:        #090909;
+      --bg-1:      #0f0f0f;
+      --bg-2:      #141414;
+      --bg-3:      #1a1a1a;
+      --border:    #222222;
+      --border-h:  #2e2e2e;
+      --text:      #e8e8e8;
+      --muted:     #666666;
+      --muted-2:   #444444;
+      --accent:    #00ff88;
+      --accent-2:  #ff6b35;
+      --accent-3:  #5b8cff;
+      --accent-4:  #ffd700;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Syne', sans-serif;
+      --radius:    8px;
+      --radius-lg: 14px;
+      --shadow:    0 4px 32px rgba(0,0,0,0.6);
+      --shadow-glow: 0 0 40px rgba(0,255,136,0.08);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================
+       RESET & BASE
+    ============================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+
+    /* ============================
+       SCROLLBAR
+    ============================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-h); border-radius: 99px; }
+
+    /* ============================
+       NOISE OVERLAY
+    ============================ */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ============================
+       GRID LINES BACKGROUND
+    ============================ */
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============================
+       LAYOUT
+    ============================ */
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============================
+       NAVBAR
+    ============================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9,9,9,0.85);
+      backdrop-filter: blur(16px);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-logo .dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+    .nav-links a {
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); background: var(--bg-3); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .visitor-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 99px;
+      transition: var(--transition);
+    }
+    .visitor-badge .live-dot {
+      width: 5px; height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    #visitor-count { color: var(--accent); font-weight: 600; }
+
+    /* ============================
+       HERO
+    ============================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 56px;
+    }
+    .hero-inner {
+      padding: 80px 0 60px;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,255,136,0.2);
+      background: rgba(0,255,136,0.04);
+      padding: 5px 12px;
+      border-radius: 99px;
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.8s infinite;
+    }
+    .hero-title {
+      font-family: var(--font-sans);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    .hero-title .line-1 { display: block; }
+    .hero-title .line-2 {
+      display: block;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+      color: transparent;
+    }
+    .hero-title .accent-word { color: var(--accent); }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      transition: var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover { background: #00e67a; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,255,136,0.25); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--border-h); background: var(--bg-2); transform: translateY(-1px); }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .hero-stat { }
+    .hero-stat .num {
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+    }
+    .hero-stat .label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================
+       SECTION SHARED
+    ============================ */
+    section { padding: 80px 0; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title {
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .section-title span { color: var(--accent); }
+    .section-link {
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 99px;
+      transition: var(--transition);
+    }
+    .section-link:hover { color: var(--text); border-color: var(--border-h); }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ============================
+       CARD SHARED
+    ============================ */
+    .card {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: var(--transition);
+    }
+    .card:hover {
+      border-color: var(--border-h);
+      background: var(--bg-2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    /* ============================
+       GITHUB STATS STRIP
+    ============================ */
+    #stats {
+      padding: 40px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .stat-cell {
+      background: var(--bg-1);
+      padding: 24px 20px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .stat-cell:hover { background: var(--bg-2); }
+    .stat-cell .val {
+      font-family: var(--font-sans);
+      font-size: 32px;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .stat-cell .key {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .c-green { color: var(--accent); }
+    .c-orange { color: var(--accent-2); }
+    .c-blue { color: var(--accent-3); }
+    .c-gold { color: var(--accent-4); }
+
+    /* ============================
+       REPOS SECTION
+    ============================ */
+    #repos .repos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+    .repo-card {
+      padding: 20px;
+    }
+    .repo-card .repo-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .repo-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--accent-3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .repo-name svg { opacity: 0.5; }
+    .repo-visibility {
+      font-size: 10px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 99px;
+    }
+    .repo-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      min-height: 36px;
+    }
+    .repo-meta {
+      display: flex;
+      gap: 14px;
+    }
+    .repo-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .lang-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--accent-3);
+    }
+    .repo-skeleton {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0%,100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    .skel-line {
+      height: 10px;
+      background: var(--border-h);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .skel-line.short { width: 40%; }
+    .skel-line.medium { width: 70%; }
+
+    /* ============================
+       FILTER TABS
+    ============================ */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tab:hover { color: var(--text); border-color: var(--border); }
+    .tab.active {
+      color: var(--accent);
+      border-color: rgba(0,255,136,0.3);
+      background: rgba(0,255,136,0.04);
+    }
+
+    /* ============================
+       TOOLS SECTION
+    ============================ */
+    #tools .tools-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .tool-category-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-category-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: var(--text);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .tool-chip:hover {
+      border-color: var(--accent);
+      background: rgba(0,255,136,0.04);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .tool-chip .beats {
+      font-size: 10px;
+      color: var(--muted-2);
+      border-left: 1px solid var(--border);
+      padding-left: 8px;
+    }
+    .tool-chip:hover .beats { color: var(--muted); }
+    .tool-chip .free-tag {
+      font-size: 9px;
+      background: rgba(0,255,136,0.1);
+      color: var(--accent);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* ============================
+       GUIDES SECTION
+    ============================ */
+    #guides .guides-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .guide-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg-1);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .guide-row:hover { background: var(--bg-2); }
+    .guide-row.open { background: var(--bg-2); }
+    .guide-number {
+      font-size: 11px;
+      color: var(--muted-2);
+      min-width: 24px;
+      font-family: var(--font-mono);
+    }
+    .guide-info { flex: 1; }
+    .guide-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .guide-desc { font-size: 11px; color: var(--muted); }
+    .guide-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .guide-tag.beginner { background: rgba(0,255,136,0.1); color: var(--accent); }
+    .guide-tag.intermediate { background: rgba(91,140,255,0.1); color: var(--accent-3); }
+    .guide-tag.advanced { background: rgba(255,107,53,0.1); color: var(--accent-2); }
+    .guide-chevron {
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 0.2s;
+    }
+    .guide-row.open .guide-chevron { transform: rotate(90deg); }
+    .guide-content {
+      display: none;
+      padding: 0 20px 20px 60px;
+      background: var(--bg-2);
+    }
+    .guide-content.open { display: block; }
+    .code-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #ccc;
+      overflow-x: auto;
+      margin-top: 12px;
+      position: relative;
+    }
+    .code-block .comment { color: #555; }
+    .code-block .kw { color: var(--accent-3); }
+    .code-block .str { color: var(--accent); }
+    .code-block .fn { color: var(--accent-2); }
+    .copy-btn {
+      position: absolute;
+      top: 10px; right: 10px;
+      font-size: 10px;
+      color: var(--muted);
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ============================
+       ALTERNATIVES TABLE
+    ============================ */
+    #alternatives .alt-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .alt-table th {
+      text-align: left;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      padding: 12px 16px;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .alt-table td {
+      padding: 12px 16px;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-1);
+    }
+    .alt-table tr:last-child td { border-bottom: none; }
+    .alt-table tr:hover td { background: var(--bg-2); }
+    .free-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .free-label.free { color: var(--accent); }
+    .free-label.paid { color: #ff4d4d; }
+    .free-label.freemium { color: var(--accent-4); }
+    .alt-name a { color: var(--accent-3); }
+    .alt-name a:hover { color: var(--text); }
+    .category-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--bg-3);
+      color: var(--muted);
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 16px;
+      transition: var(--transition);
+    }
+    .search-input::placeholder { color: var(--muted-2); }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,255,136,0.08); }
+
+    /* ============================
+       TERMINAL SECTION
+    ============================ */
+    #terminal-section { padding: 80px 0; }
+    .terminal {
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+    .terminal-bar {
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .term-dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .td-r { background: #ff5f56; }
+    .td-y { background: #ffbd2e; }
+    .td-g { background: #27c93f; }
+    .term-title {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .terminal-body {
+      padding: 24px 28px;
+      font-size: 13px;
+      line-height: 2;
+      min-height: 280px;
+    }
+    .term-line { display: flex; align-items: flex-start; gap: 10px; }
+    .term-prompt { color: var(--accent); user-select: none; }
+    .term-cmd { color: var(--text); }
+    .term-output { color: var(--muted); padding-left: 20px; }
+    .term-output.success { color: var(--accent); }
+    .term-output.warn { color: var(--accent-2); }
+    .term-cursor {
+      display: inline-block;
+      width: 8px; height: 15px;
+      background: var(--accent);
+      animation: blink 1.2s step-end infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ============================
+       FOOTER
+    ============================ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      margin-top: 40px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+    .footer-links a {
+      font-size: 11px;
+      color: var(--muted);
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted-2);
+    }
+    .update-time {
+      font-size: 10px;
+      color: var(--muted-2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ============================
+       ANIMATIONS
+    ============================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================
+       GLOW ORBS
+    ============================ */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(100px);
+      opacity: 0.06;
+    }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: var(--accent);
+      top: -200px; left: -200px;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: var(--accent-3);
+      bottom: -200px; right: -200px;
+    }
+
+    /* ============================
+       TOAST
+    ============================ */
+    #toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      font-size: 12px;
+      color: var(--accent);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.25s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ============================
+       RESPONSIVE
+    ============================ */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-title { letter-spacing: -1px; }
+      .alt-table { font-size: 11px; }
+      .alt-table th, .alt-table td { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AMBIENT -->
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div id="toast"></div>
+
+<!-- ============================
+     NAVBAR
+============================ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="dot"></div>
+      neverneer
+    </div>
+    <div class="nav-links">
+      <a href="#repos">Repos</a>
+      <a href="#tools">Tools</a>
+      <a href="#alternatives">Alternatives</a>
+      <a href="#guides">Guides</a>
+    </div>
+    <div class="nav-right">
+      <div class="visitor-badge">
+        <div class="live-dot"></div>
+        <span id="visitor-count">...</span>
+        <span>views</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================
+     HERO
+============================ -->
+<section id="hero">
+  <div class="wrapper">
+    <div class="hero-inner">
+      <div class="hero-eyebrow fade-up">open source · free tools · no bloat</div>
+      <h1 class="hero-title fade-up">
+        <span class="line-1">build <span class="accent-word">free.</span></span>
+        <span class="line-2">stay sharp.</span>
+      </h1>
+      <p class="hero-sub fade-up">
+        Free tools over paid bloat. Open source over closed walls.
+        Everything here is for builders who don't need a subscription to ship.
+      </p>
+      <div class="hero-cta fade-up">
+        <a href="#tools" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Free Tools
+        </a>
+        <a href="https://github.com/neverneer" target="_blank" class="btn btn-ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat fade-up">
+          <span class="num c-green" id="stat-repos">—</span>
+          <span class="label">Public Repos</span>
+        </div>
+        <div class="hero-stat fade-up">
+          <span class="num c-gold" id="stat-stars">—</span>
+          <span class="label">Total Stars</span>
+        </div>
+        <div class="hero-stat fade-up">
+          <span class="num c-blue" id="stat-followers">—</span>
+          <span class="label">Followers</span>
+        </div>
+        <div class="hero-stat fade-up">
+          <span class="num c-orange" id="stat-tools">40+</span>
+          <span class="label">Free Tools Listed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     LIVE GITHUB STATS STRIP
+============================ -->
+<section id="stats">
+  <div class="wrapper">
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <span class="val c-green" id="cell-repos">—</span>
+        <span class="key">Repos</span>
+      </div>
+      <div class="stat-cell">
+        <span class="val c-gold" id="cell-stars">—</span>
+        <span class="key">Stars</span>
+      </div>
+      <div class="stat-cell">
+        <span class="val c-orange" id="cell-forks">—</span>
+        <span class="key">Forks</span>
+      </div>
+      <div class="stat-cell">
+        <span class="val c-blue" id="cell-followers">—</span>
+        <span class="key">Followers</span>
+      </div>
+      <div class="stat-cell">
+        <span class="val" id="cell-updated" style="font-size:14px;">—</span>
+        <span class="key">Last Push</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     REPOS
+============================ -->
+<section id="repos">
+  <div class="wrapper">
+    <div class="section-header fade-up">
+      <h2 class="section-title">Latest <span>Repos</span></h2>
+      <a href="https://github.com/neverneer?tab=repositories" target="_blank" class="section-link">View all →</a>
+    </div>
+    <div class="tab-bar fade-up">
+      <button class="tab active" data-filter="all">All</button>
+      <button class="tab" data-filter="popular">⭐ Popular</button>
+      <button class="tab" data-filter="recent">🕐 Recent</button>
+      <button class="tab" data-filter="forked">🍴 Forked</button>
+    </div>
+    <div class="repos-grid" id="repos-grid">
+      <!-- Skeleton loaders -->
+      <div class="repo-skeleton">
+        <div class="skel-line short"></div>
+        <div class="skel-line medium"></div>
+        <div class="skel-line short"></div>
+      </div>
+      <div class="repo-skeleton">
+        <div class="skel-line medium"></div>
+        <div class="skel-line short"></div>
+        <div class="skel-line medium"></div>
+      </div>
+      <div class="repo-skeleton">
+        <div class="skel-line short"></div>
+        <div class="skel-line medium"></div>
+        <div class="skel-line short"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     TOOLS
+============================ -->
+<section id="tools">
+  <div class="wrapper">
+    <div class="section-header fade-up">
+      <h2 class="section-title">Free <span>Tools</span> Arsenal</h2>
+      <span class="section-link">why pay?</span>
+    </div>
+    <div class="tools-categories">
+
+      <div class="fade-up">
+        <div class="tool-category-title">🎨 Design & UI</div>
+        <div class="tools-row" id="tools-design"></div>
+      </div>
+
+      <div class="fade-up">
+        <div class="tool-category-title">💻 Dev & Hosting</div>
+        <div class="tools-row" id="tools-dev"></div>
+      </div>
+
+      <div class="fade-up">
+        <div class="tool-category-title">🤖 AI & Productivity</div>
+        <div class="tools-row" id="tools-ai"></div>
+      </div>
+
+      <div class="fade-up">
+        <div class="tool-category-title">🔒 Privacy & Security</div>
+        <div class="tools-row" id="tools-privacy"></div>
+      </div>
+
+      <div class="fade-up">
+        <div class="tool-category-title">🎥 Media & Creative</div>
+        <div class="tools-row" id="tools-media"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     ALTERNATIVES TABLE
+============================ -->
+<section id="alternatives">
+  <div class="wrapper">
+    <div class="section-header fade-up">
+      <h2 class="section-title">Paid → <span>Free</span> Alternatives</h2>
+    </div>
+    <input type="text" class="search-input fade-up" id="alt-search" placeholder="Search tools... (e.g. Photoshop, Figma, Notion)" />
+    <div style="overflow-x:auto;">
+      <table class="alt-table fade-up" id="alt-table">
+        <thead>
+          <tr>
+            <th>Free Alternative</th>
+            <th>Replaces</th>
+            <th>Category</th>
+            <th>Cost</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody id="alt-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     GUIDES
+============================ -->
+<section id="guides">
+  <div class="wrapper">
+    <div class="section-header fade-up">
+      <h2 class="section-title">Quick <span>Guides</span></h2>
+    </div>
+    <div class="guides-list fade-up" id="guides-list"></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     TERMINAL
+============================ -->
+<section id="terminal-section">
+  <div class="wrapper">
+    <div class="section-header fade-up">
+      <h2 class="section-title">Deploy in <span>Seconds</span></h2>
+    </div>
+    <div class="terminal fade-up">
+      <div class="terminal-bar">
+        <div class="term-dot td-r"></div>
+        <div class="term-dot td-y"></div>
+        <div class="term-dot td-g"></div>
+        <div class="term-title">bash — neverneer@dev</div>
+      </div>
+      <div class="terminal-body" id="terminal-output"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ============================
+     FOOTER
+============================ -->
+<footer>
+  <div class="wrapper">
+    <div class="footer-inner">
+      <div class="footer-logo">neverneer</div>
+      <div class="footer-links">
+        <a href="https://github.com/neverneer" target="_blank">GitHub</a>
+        <a href="#tools">Tools</a>
+        <a href="#guides">Guides</a>
+        <a href="#alternatives">Alternatives</a>
+      </div>
+      <div style="text-align:right;">
+        <div class="update-time">
+          <div class="live-dot" style="width:5px;height:5px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;"></div>
+          Auto-updates from GitHub API
+        </div>
+        <div class="footer-copy" id="last-updated">Last updated: —</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================
+     JAVASCRIPT
+============================ -->
+<script>
+/* ========================================
+   DATA
+======================================== */
+const GITHUB_USER = 'neverneer';
+
+const TOOLS_DATA = {
+  design: [
+    { name: 'Penpot', beats: 'Figma', url: 'https://penpot.app' },
+    { name: 'Figma (free)', beats: 'Adobe XD', url: 'https://figma.com' },
+    { name: 'Spline', beats: 'C4D/3D web', url: 'https://spline.design' },
+    { name: 'Coolors', beats: 'Adobe Color', url: 'https://coolors.co' },
+    { name: 'Iconoir', beats: 'Font Awesome Pro', url: 'https://iconoir.com' },
+    { name: 'Phosphor Icons', beats: 'Material Icons', url: 'https://phosphoricons.com' },
+    { name: 'Heroicons', beats: 'paid icon sets', url: 'https://heroicons.com' },
+    { name: 'Google Fonts', beats: 'Typekit', url: 'https://fonts.google.com' },
+    { name: 'Shots.so (free)', beats: 'paid mockups', url: 'https://shots.so' },
+  ],
+  dev: [
+    { name: 'VS Code', beats: 'JetBrains IDEs', url: 'https://code.visualstudio.com' },
+    { name: 'Gitpod', beats: 'local dev env', url: 'https://gitpod.io' },
+    { name: 'Vercel', beats: 'Netlify Pro', url: 'https://vercel.com' },
+    { name: 'Railway', beats: 'Heroku', url: 'https://railway.app' },
+    { name: 'Supabase', beats: 'Firebase', url: 'https://supabase.com' },
+    { name: 'Cloudflare Workers', beats: 'AWS Lambda', url: 'https://workers.cloudflare.com' },
+    { name: 'Neon DB', beats: 'AWS RDS', url: 'https://neon.tech' },
+    { name: 'Render', beats: 'DigitalOcean App Platform', url: 'https://render.com' },
+    { name: 'Thunder Client', beats: 'Postman', url: 'https://thunderclient.com' },
+    { name: 'GitHub Pages', beats: 'paid static hosting', url: 'https://pages.github.com' },
+  ],
+  ai: [
+    { name: 'Claude.ai (free)', beats: 'ChatGPT Plus', url: 'https://claude.ai' },
+    { name: 'Perplexity', beats: 'Copilot Pro', url: 'https://perplexity.ai' },
+    { name: 'Mistral (free API)', beats: 'OpenAI API', url: 'https://mistral.ai' },
+    { name: 'Hugging Face', beats: 'AWS AI services', url: 'https://huggingface.co' },
+    { name: 'SDXL/ComfyUI', beats: 'Midjourney', url: 'https://comfyui.org' },
+    { name: 'Obsidian', beats: 'Roam Research', url: 'https://obsidian.md' },
+    { name: 'Notion (free)', beats: 'Confluence', url: 'https://notion.so' },
+    { name: 'Joplin', beats: 'Evernote', url: 'https://joplinapp.org' },
+  ],
+  privacy: [
+    { name: 'Bitwarden', beats: 'LastPass / 1Password', url: 'https://bitwarden.com' },
+    { name: 'ProtonMail', beats: 'Gmail (privacy)', url: 'https://proton.me' },
+    { name: 'Signal', beats: 'WhatsApp', url: 'https://signal.org' },
+    { name: 'uBlock Origin', beats: 'paid ad blockers', url: 'https://ublockorigin.com' },
+    { name: 'Mullvad VPN (free trial)', beats: 'ExpressVPN', url: 'https://mullvad.net' },
+    { name: 'Brave Browser', beats: 'Chrome (privacy)', url: 'https://brave.com' },
+    { name: 'SimpleLogin', beats: 'paid email aliases', url: 'https://simplelogin.io' },
+  ],
+  media: [
+    { name: 'DaVinci Resolve', beats: 'Premiere Pro / Final Cut', url: 'https://www.blackmagicdesign.com/products/davinciresolve' },
+    { name: 'GIMP', beats: 'Photoshop', url: 'https://gimp.org' },
+    { name: 'Inkscape', beats: 'Illustrator', url: 'https://inkscape.org' },
+    { name: 'OBS Studio', beats: 'Camtasia', url: 'https://obsproject.com' },
+    { name: 'Audacity', beats: 'Adobe Audition', url: 'https://audacityteam.org' },
+    { name: 'Kdenlive', beats: 'iMovie / Premiere', url: 'https://kdenlive.org' },
+    { name: 'Blender', beats: 'Maya / 3ds Max', url: 'https://blender.org' },
+  ],
+};
+
+const ALT_DATA = [
+  { free: 'GIMP', url: 'https://gimp.org', replaces: 'Photoshop (Adobe)', cat: 'Design', cost: 'Free', rating: '★★★★☆' },
+  { free: 'Inkscape', url: 'https://inkscape.org', replaces: 'Illustrator (Adobe)', cat: 'Design', cost: 'Free', rating: '★★★★☆' },
+  { free: 'Penpot', url: 'https://penpot.app', replaces: 'Figma / Sketch', cat: 'UI Design', cost: 'Free', rating: '★★★★★' },
+  { free: 'DaVinci Resolve', url: 'https://blackmagicdesign.com', replaces: 'Premiere Pro', cat: 'Video', cost: 'Free', rating: '★★★★★' },
+  { free: 'Audacity', url: 'https://audacityteam.org', replaces: 'Adobe Audition', cat: 'Audio', cost: 'Free', rating: '★★★★☆' },
+  { free: 'Blender', url: 'https://blender.org', replaces: 'Maya / Cinema 4D', cat: '3D', cost: 'Free', rating: '★★★★★' },
+  { free: 'OBS Studio', url: 'https://obsproject.com', replaces: 'Camtasia', cat: 'Recording', cost: 'Free', rating: '★★★★★' },
+  { free: 'Bitwarden', url: 'https://bitwarden.com', replaces: 'LastPass / 1Password', cat: 'Security', cost: 'Free+', rating: '★★★★★' },
+  { free: 'Supabase', url: 'https://supabase.com', replaces: 'Firebase', cat: 'Backend', cost: 'Freemium', rating: '★★★★★' },
+  { free: 'Vercel', url: 'https://vercel.com', replaces: 'Netlify Pro', cat: 'Hosting', cost: 'Freemium', rating: '★★★★★' },
+  { free: 'Cloudflare Workers', url: 'https://workers.cloudflare.com', replaces: 'AWS Lambda', cat: 'Serverless', cost: 'Free', rating: '★★★★★' },
+  { free: 'VS Code', url: 'https://code.visualstudio.com', replaces: 'JetBrains IDEs', cat: 'Editor', cost: 'Free', rating: '★★★★★' },
+  { free: 'LibreOffice', url: 'https://libreoffice.org', replaces: 'Microsoft Office', cat: 'Office', cost: 'Free', rating: '★★★★☆' },
+  { free: 'Obsidian', url: 'https://obsidian.md', replaces: 'Roam Research / Notion', cat: 'Notes', cost: 'Free', rating: '★★★★★' },
+  { free: 'Signal', url: 'https://signal.org', replaces: 'WhatsApp / iMessage', cat: 'Messaging', cost: 'Free', rating: '★★★★★' },
+  { free: 'ProtonMail', url: 'https://proton.me', replaces: 'Gmail (privacy)', cat: 'Email', cost: 'Freemium', rating: '★★★★★' },
+  { free: 'Brave Browser', url: 'https://brave.com', replaces: 'Chrome / Edge', cat: 'Browser', cost: 'Free', rating: '★★★★★' },
+  { free: 'Neon DB', url: 'https://neon.tech', replaces: 'AWS RDS / PlanetScale', cat: 'Database', cost: 'Freemium', rating: '★★★★★' },
+  { free: 'Railway', url: 'https://railway.app', replaces: 'Heroku', cat: 'Hosting', cost: 'Freemium', rating: '★★★★☆' },
+  { free: 'Perplexity (free)', url: 'https://perplexity.ai', replaces: 'Copilot Pro', cat: 'AI', cost: 'Freemium', rating: '★★★★★' },
+  { free: 'Mistral API (free)', url: 'https://mistral.ai', replaces: 'OpenAI API', cat: 'AI API', cost: 'Freemium', rating: '★★★★☆' },
+  { free: 'Stable Diffusion', url: 'https://stability.ai', replaces: 'Midjourney / DALL·E', cat: 'AI Art', cost: 'Free', rating: '★★★★☆' },
+  { free: 'Kdenlive', url: 'https://kdenlive.org', replaces: 'iMovie / Final Cut', cat: 'Video', cost: 'Free', rating: '★★★★☆' },
+  { free: 'uBlock Origin', url: 'https://ublockorigin.com', replaces: 'paid ad blockers', cat: 'Browser', cost: 'Free', rating: '★★★★★' },
+  { free: 'SimpleLogin', url: 'https://simplelogin.io', replaces: 'paid email aliases', cat: 'Privacy', cost: 'Freemium', rating: '★★★★☆' },
+];
+
+const GUIDES_DATA = [
+  {
+    title: 'Deploy a free website with GitHub Pages',
+    desc: 'Go live in under 5 minutes — no server, no cost',
+    level: 'beginner',
+    code: `<span class="comment"># Step 1: Create a repo named yourusername.github.io</span>
+<span class="comment"># Step 2: Clone it locally</span>
+<span class="kw">git</span> <span class="fn">clone</span> https://github.com/yourusername/yourusername.github.io
+<span class="kw">cd</span> yourusername.github.io
+
+<span class="comment"># Step 3: Add your index.html</span>
+<span class="fn">echo</span> <span class="str">"&lt;h1&gt;Hello World&lt;/h1&gt;"</span> > index.html
+
+<span class="comment"># Step 4: Push — it's live!</span>
+<span class="kw">git</span> <span class="fn">add</span> . && <span class="kw">git</span> <span class="fn">commit</span> -m <span class="str">"launch"</span> && <span class="kw">git</span> <span class="fn">push</span>
+
+<span class="comment"># Your site is now live at: https://yourusername.github.io</span>`
+  },
+  {
+    title: 'Set up a free Postgres DB with Supabase',
+    desc: 'Production-ready database, free tier, no credit card',
+    level: 'beginner',
+    code: `<span class="comment"># Install Supabase JS client</span>
+npm install @supabase/supabase-js
+
+<span class="comment"># Initialize in your project</span>
+<span class="kw">import</span> { createClient } <span class="kw">from</span> <span class="str">'@supabase/supabase-js'</span>
+
+<span class="kw">const</span> supabase = <span class="fn">createClient</span>(
+  <span class="str">'https://yourproject.supabase.co'</span>,
+  <span class="str">'your-anon-key'</span>
+)
+
+<span class="comment"># Query your database</span>
+<span class="kw">const</span> { data, error } = <span class="kw">await</span> supabase
+  .<span class="fn">from</span>(<span class="str">'users'</span>)
+  .<span class="fn">select</span>(<span class="str">'*'</span>)
+  .<span class="fn">limit</span>(10)
+
+console.<span class="fn">log</span>(data) <span class="comment">// Free 500MB Postgres, no credit card</span>`
+  },
+  {
+    title: 'Build a serverless API with Cloudflare Workers',
+    desc: '100,000 free requests/day — no AWS account needed',
+    level: 'intermediate',
+    code: `<span class="comment"># Install Wrangler CLI</span>
+npm install -g wrangler
+
+<span class="comment"># Create a new Worker</span>
+wrangler init my-api
+<span class="kw">cd</span> my-api
+
+<span class="comment"># Edit src/index.js</span>
+<span class="kw">export default</span> {
+  <span class="kw">async</span> <span class="fn">fetch</span>(request, env, ctx) {
+    <span class="kw">const</span> url = <span class="kw">new</span> <span class="fn">URL</span>(request.url)
+    
+    <span class="kw">if</span> (url.pathname === <span class="str">'/api/hello'</span>) {
+      <span class="kw">return new</span> <span class="fn">Response</span>(
+        JSON.<span class="fn">stringify</span>({ message: <span class="str">'Hello from the edge!'</span> }),
+        { headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> } }
+      )
+    }
+    <span class="kw">return new</span> <span class="fn">Response</span>(<span class="str">'Not found'</span>, { status: 404 })
+  }
+}
+
+<span class="comment"># Deploy (free, globally distributed)</span>
+wrangler deploy`
+  },
+  {
+    title: 'Self-host Penpot (free Figma alternative)',
+    desc: 'Full design suite, self-hosted, open source',
+    level: 'intermediate',
+    code: `<span class="comment"># Requires Docker & Docker Compose</span>
+
+<span class="comment"># Pull Penpot docker-compose config</span>
+<span class="fn">curl</span> -o docker-compose.yaml <span class="str">\\
+  https://raw.githubusercontent.com/penpot/penpot/main/docker/images/docker-compose.yaml</span>
+
+<span class="comment"># Start Penpot</span>
+docker-compose up -d
+
+<span class="comment"># Access at: http://localhost:9001</span>
+<span class="comment"># Default: admin@example.com / penpot</span>
+
+<span class="comment"># Now you have a full Figma-like design tool</span>
+<span class="comment"># for your whole team, forever, for free.</span>`
+  },
+  {
+    title: 'Set up Bitwarden (self-hosted password manager)',
+    desc: 'Your own password vault — no subscription, full control',
+    level: 'advanced',
+    code: `<span class="comment"># Option 1: Use the free cloud version (easiest)</span>
+<span class="comment"># → Go to bitwarden.com, it's free for personal use</span>
+
+<span class="comment"># Option 2: Self-host with Vaultwarden (most control)</span>
+docker run -d \\
+  --name vaultwarden \\
+  -v /vw-data/:/data/ \\
+  -p 80:80 \\
+  vaultwarden/server:latest
+
+<span class="comment"># Access at http://localhost</span>
+<span class="comment"># Use Bitwarden clients to connect to your server</span>
+<span class="comment"># Store as many passwords as you want, forever free</span>`
+  },
+  {
+    title: 'Build AI-powered apps with free Mistral API',
+    desc: 'Better than OpenAI for many tasks, free tier available',
+    level: 'intermediate',
+    code: `<span class="comment"># Get your free API key at mistral.ai</span>
+npm install @mistralai/mistralai
+
+<span class="kw">import</span> Mistral <span class="kw">from</span> <span class="str">'@mistralai/mistralai'</span>
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">Mistral</span>({ apiKey: process.env.MISTRAL_API_KEY })
+
+<span class="kw">const</span> response = <span class="kw">await</span> client.chat.<span class="fn">complete</span>({
+  model: <span class="str">'mistral-small-latest'</span>, <span class="comment">// free tier</span>
+  messages: [
+    { role: <span class="str">'user'</span>, content: <span class="str">'Explain how async/await works'</span> }
+  ]
+})
+
+console.<span class="fn">log</span>(response.choices[0].message.content)`
+  },
+];
+
+/* ========================================
+   VISITOR COUNTER
+   Uses a free countapi.xyz / hits service
+======================================== */
+async function loadVisitorCount() {
+  try {
+    // Using hits.seeyoufarm.com API-compatible endpoint
+    const res = await fetch(`https://api.countapi.xyz/hit/neverneer.github.io/visits`);
+    const data = await res.json();
+    const count = data.value?.toLocaleString() || '—';
+    document.getElementById('visitor-count').textContent = count;
+  } catch {
+    document.getElementById('visitor-count').textContent = '—';
+  }
+}
+
+/* ========================================
+   GITHUB API
+======================================== */
+let allRepos = [];
+let currentFilter = 'all';
+
+async function loadGitHub() {
+  try {
+    const [userRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${GITHUB_USER}`),
+      fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=30&sort=updated`)
+    ]);
+
+    if (!userRes.ok || !reposRes.ok) throw new Error('API error');
+
+    const user = await userRes.json();
+    const repos = await reposRes.json();
+    allRepos = repos;
+
+    // Update hero stats
+    document.getElementById('stat-repos').textContent = user.public_repos || '—';
+    document.getElementById('stat-followers').textContent = user.followers || '—';
+
+    // Calculate total stars
+    const totalStars = repos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
+    document.getElementById('stat-stars').textContent = totalStars;
+
+    // Stats strip
+    document.getElementById('cell-repos').textContent = user.public_repos || '—';
+    document.getElementById('cell-followers').textContent = user.followers || '—';
+    document.getElementById('cell-stars').textContent = totalStars;
+
+    const totalForks = repos.reduce((sum, r) => sum + (r.forks_count || 0), 0);
+    document.getElementById('cell-forks').textContent = totalForks;
+
+    // Last update
+    const sorted = [...repos].sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+    if (sorted[0]) {
+      const d = new Date(sorted[0].pushed_at);
+      const rel = relativeTime(d);
+      document.getElementById('cell-updated').textContent = rel;
+    }
+
+    renderRepos(repos);
+    updateLastUpdated();
+
+  } catch (err) {
+    console.warn('GitHub API error:', err);
+    document.getElementById('repos-grid').innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:13px;">
+        Could not load repos (GitHub API rate limit or network issue).
+        <br><a href="https://github.com/${GITHUB_USER}" target="_blank" style="color:var(--accent-3);margin-top:8px;display:block;">View on GitHub →</a>
+      </div>`;
+  }
+}
+
+function relativeTime(date) {
+  const diff = Date.now() - date.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return date.toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
+}
+
+const LANG_COLORS = {
+  JavaScript: '#f7df1e', TypeScript: '#3178c6', Python: '#3776ab',
+  HTML: '#e34f26', CSS: '#1572b6', Shell: '#89e051',
+  'Jupyter Notebook': '#da5b0b', Vue: '#41b883', Svelte: '#ff3e00',
+  Go: '#00add8', Rust: '#dea584', default: '#888888'
+};
+
+function renderRepos(repos) {
+  let filtered = [...repos];
+  if (currentFilter === 'popular') {
+    filtered = [...repos].sort((a, b) => b.stargazers_count - a.stargazers_count);
+  } else if (currentFilter === 'recent') {
+    filtered = [...repos].sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+  } else if (currentFilter === 'forked') {
+    filtered = repos.filter(r => r.fork);
+    if (!filtered.length) filtered = repos.slice(0, 6);
+  }
+
+  filtered = filtered.slice(0, 6);
+
+  const grid = document.getElementById('repos-grid');
+  if (!filtered.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:13px;">No repos found.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(repo => {
+    const langColor = LANG_COLORS[repo.language] || LANG_COLORS.default;
+    const updatedAgo = relativeTime(new Date(repo.pushed_at));
+    const desc = repo.description || 'No description provided.';
+    return `
+    <a href="${repo.html_url}" target="_blank" class="card repo-card">
+      <div class="repo-top">
+        <div class="repo-name">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/></svg>
+          ${repo.name}
+        </div>
+        <span class="repo-visibility">${repo.private ? 'private' : 'public'}</span>
+      </div>
+      <div class="repo-desc">${desc.length > 80 ? desc.slice(0, 80) + '…' : desc}</div>
+      <div class="repo-meta">
+        ${repo.language ? `<div class="repo-meta-item"><div class="lang-dot" style="background:${langColor}"></div>${repo.language}</div>` : ''}
+        <div class="repo-meta-item">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          ${repo.stargazers_count}
+        </div>
+        <div class="repo-meta-item">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"/><line x1="12" y1="12" x2="12" y2="15"/></svg>
+          ${repo.forks_count}
+        </div>
+        <div class="repo-meta-item" style="margin-left:auto;">
+          ${updatedAgo}
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+/* ========================================
+   RENDER TOOLS
+======================================== */
+function renderTools() {
+  Object.entries(TOOLS_DATA).forEach(([cat, tools]) => {
+    const el = document.getElementById(`tools-${cat}`);
+    if (!el) return;
+    el.innerHTML = tools.map(t => `
+      <a href="${t.url}" target="_blank" class="tool-chip">
+        ${t.name}
+        <span class="beats">↑ ${t.beats}</span>
+        <span class="free-tag">FREE</span>
+      </a>`).join('');
+  });
+}
+
+/* ========================================
+   RENDER ALTERNATIVES TABLE
+======================================== */
+function renderAltTable(data) {
+  const tbody = document.getElementById('alt-tbody');
+  const costColor = { 'Free': 'free', 'Free+': 'free', 'Freemium': 'freemium', 'Paid': 'paid' };
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td class="alt-name"><a href="${row.url}" target="_blank">${row.free}</a></td>
+      <td style="color:var(--muted)">${row.replaces}</td>
+      <td><span class="category-badge">${row.cat}</span></td>
+      <td><span class="free-label ${costColor[row.cost] || 'free'}">${row.cost === 'Free' ? '✓' : row.cost === 'Freemium' ? '◐' : '✗'} ${row.cost}</span></td>
+      <td style="color:var(--accent-4);font-size:11px;">${row.rating}</td>
+    </tr>`).join('');
+}
+
+document.getElementById('alt-search').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  const filtered = ALT_DATA.filter(r =>
+    r.free.toLowerCase().includes(q) ||
+    r.replaces.toLowerCase().includes(q) ||
+    r.cat.toLowerCase().includes(q)
+  );
+  renderAltTable(filtered);
+});
+
+/* ========================================
+   RENDER GUIDES
+======================================== */
+function renderGuides() {
+  const list = document.getElementById('guides-list');
+  list.innerHTML = GUIDES_DATA.map((g, i) => `
+    <div>
+      <div class="guide-row" onclick="toggleGuide(${i}, this)">
+        <div class="guide-number">${String(i + 1).padStart(2, '0')}</div>
+        <div class="guide-info">
+          <div class="guide-title">${g.title}</div>
+          <div class="guide-desc">${g.desc}</div>
+        </div>
+        <span class="guide-tag ${g.level}">${g.level}</span>
+        <div class="guide-chevron">▶</div>
+      </div>
+      <div class="guide-content" id="guide-${i}">
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyCode(this, event)">copy</button>
+          <pre style="white-space:pre-wrap;">${g.code}</pre>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleGuide(i, row) {
+  const content = document.getElementById(`guide-${i}`);
+  const isOpen = content.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.guide-row').forEach(r => r.classList.remove('open'));
+  if (!isOpen) {
+    content.classList.add('open');
+    row.classList.add('open');
+  }
+}
+
+function copyCode(btn, e) {
+  e.stopPropagation();
+  const pre = btn.nextElementSibling;
+  const text = pre.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied!';
+    btn.style.color = 'var(--accent)';
+    showToast('Copied to clipboard!');
+    setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+  });
+}
+
+/* ========================================
+   TERMINAL ANIMATION
+======================================== */
+const termLines = [
+  { type: 'cmd', text: 'git clone https://github.com/neverneer/myproject.git', delay: 200 },
+  { type: 'out', text: "Cloning into 'myproject'...", delay: 400 },
+  { type: 'out', text: 'remote: Enumerating objects: 142, done.', delay: 600, cls: '' },
+  { type: 'out', text: '✓ Done. Enter your project.', delay: 800, cls: 'success' },
+  { type: 'cmd', text: 'cd myproject && vercel --prod', delay: 1200 },
+  { type: 'out', text: '⚡ Vercel CLI 32.5 — building...', delay: 1500, cls: 'warn' },
+  { type: 'out', text: '✓ Deployed to production: https://myproject.vercel.app', delay: 2200, cls: 'success' },
+  { type: 'cmd', text: 'echo "shipped. for free." ', delay: 3000 },
+  { type: 'out', text: 'shipped. for free.', delay: 3200, cls: 'success' },
+];
+
+function renderTerminal() {
+  const out = document.getElementById('terminal-output');
+  out.innerHTML = '';
+  termLines.forEach((line, i) => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      if (line.type === 'cmd') {
+        div.className = 'term-line';
+        div.innerHTML = `<span class="term-prompt">~/dev $</span><span class="term-cmd"> ${line.text}</span>`;
+      } else {
+        div.className = `term-output${line.cls ? ' ' + line.cls : ''}`;
+        div.textContent = line.text;
+      }
+      out.appendChild(div);
+      out.scrollTop = out.scrollHeight;
+
+      if (i === termLines.length - 1) {
+        const cursor = document.createElement('span');
+        cursor.className = 'term-line';
+        cursor.innerHTML = `<span class="term-prompt">~/dev $</span> <span class="term-cursor"></span>`;
+        out.appendChild(cursor);
+      }
+    }, line.delay);
+  });
+}
+
+/* ========================================
+   TABS
+======================================== */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    currentFilter = this.dataset.filter;
+    renderRepos(allRepos);
+  });
+});
+
+/* ========================================
+   SCROLL ANIMATIONS
+======================================== */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+/* ========================================
+   TOAST
+======================================== */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ========================================
+   LAST UPDATED
+======================================== */
+function updateLastUpdated() {
+  const now = new Date();
+  document.getElementById('last-updated').textContent =
+    `Last updated: ${now.toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' })}`;
+}
+
+/* ========================================
+   AUTO REFRESH (every 5 min)
+======================================== */
+setInterval(() => {
+  loadGitHub();
+  loadVisitorCount();
+}, 5 * 60 * 1000);
+
+/* ========================================
+   INIT
+======================================== */
+renderTools();
+renderAltTable(ALT_DATA);
+renderGuides();
+renderTerminal();
+loadGitHub();
+loadVisitorCount();
+
+// Re-run observer for dynamically added elements
+setTimeout(() => {
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+}, 500);
+</script>
+</body>
+</html>
