@@ -1,14 +1,14 @@
 <div align="center">
 
 <!-- HEADER BANNER -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0a0a,50:111111,100:1a1a2e&height=200&section=header&text=neverneer&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=building%20tools%20%E2%80%A2%20sharing%20knowledge%20%E2%80%A2%20staying%20free&descSize=16&descAlignY=60&descColor=888888&animation=fadeIn" />
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0a0a,50:111111,100:1a1a2e&height=200&section=header&text=VOIDENMARK&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=building%20tools%20%E2%80%A2%20sharing%20knowledge%20%E2%80%A2%20staying%20free&descSize=16&descAlignY=60&descColor=888888&animation=fadeIn" />
 
 <!-- LIVE VISITOR COUNTER -->
-<a href="https://github.com/neverneer">
-  <img src="https://komarev.com/ghpvc/?username=neverneer&style=for-the-badge&color=111111&label=PROFILE+VIEWS&labelColor=000000" />
+<a href="https://github.com/VOIDENMARK">
+  <img src="https://komarev.com/ghpvc/?username=VOIDENMARK&style=for-the-badge&color=111111&label=PROFILE+VIEWS&labelColor=000000" />
 </a>
 &nbsp;
-<a href="https://neverneer.github.io">
+<a href="https://voidenmark.github.io">
   <img src="https://img.shields.io/badge/SITE-LIVE-00ff88?style=for-the-badge&labelColor=000000" />
 </a>
 &nbsp;
@@ -29,10 +29,10 @@
 
 | Metric | Live Badge |
 |--------|-----------|
-| 🏆 GitHub Stars | ![Stars](https://img.shields.io/github/stars/neverneer?style=flat-square&color=ffd700&labelColor=111) |
-| 🍴 Total Forks | ![Forks](https://img.shields.io/github/forks/neverneer?style=flat-square&color=00bfff&labelColor=111) |
-| 👥 Followers | ![Followers](https://img.shields.io/github/followers/neverneer?style=flat-square&color=00ff88&labelColor=111) |
-| 📦 Public Repos | ![Repos](https://img.shields.io/badge/dynamic/json?url=https://api.github.com/users/neverneer&query=$.public_repos&label=REPOS&style=flat-square&color=ff6b35&labelColor=111) |
+| 🏆 GitHub Stars | ![Stars](https://img.shields.io/github/stars/VOIDENMARK?style=flat-square&color=ffd700&labelColor=111) |
+| 🍴 Total Forks | ![Forks](https://img.shields.io/github/forks/VOIDENMARK?style=flat-square&color=00bfff&labelColor=111) |
+| 👥 Followers | ![Followers](https://img.shields.io/github/followers/VOIDENMARK?style=flat-square&color=00ff88&labelColor=111) |
+| 📦 Public Repos | ![Repos](https://img.shields.io/badge/dynamic/json?url=https://api.github.com/users/VOIDENMARK&query=$.public_repos&label=REPOS&style=flat-square&color=ff6b35&labelColor=111) |
 
 </div>
 
@@ -42,23 +42,33 @@
 
 <div align="center">
 
-<img height="160" src="https://github-readme-stats.vercel.app/api?username=neverneer&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&icon_color=00ff88&text_color=888888&ring_color=00ff88&count_private=true" />
+<img height="160" src="https://github-readme-stats.vercel.app/api?username=VOIDENMARK&show_icons=true&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&icon_color=00ff88&text_color=888888&ring_color=00ff88&count_private=true" />
 &nbsp;
-<img height="160" src="https://github-readme-stats.vercel.app/api/top-langs/?username=neverneer&layout=compact&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&text_color=888888&langs_count=8" />
+<img height="160" src="https://github-readme-stats.vercel.app/api/top-langs/?username=VOIDENMARK&layout=compact&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&text_color=888888&langs_count=8" />
 
 <br/><br/>
 
-<img src="https://github-readme-streak-stats.herokuapp.com?user=neverneer&theme=github-dark-blue&hide_border=true&background=0D0D0D&ring=00ff88&fire=ff6b35&currStreakLabel=ffffff&sideLabels=888888" />
+<img src="https://github-readme-streak-stats.herokuapp.com?user=VOIDENMARK&theme=github-dark-blue&hide_border=true&background=0D0D0D&ring=00ff88&fire=ff6b35&currStreakLabel=ffffff&sideLabels=888888" />
 
 <br/><br/>
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=neverneer&theme=github-dark&hide_border=true&bg_color=0d0d0d&color=00ff88&line=00ff88&point=ffffff&area=true&area_color=00ff8820" />
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=VOIDENMARK&theme=github-dark&hide_border=true&bg_color=0d0d0d&color=00ff88&line=00ff88&point=ffffff&area=true&area_color=00ff8820" />
 
 </div>
 
 ---
 
+## 🚀 Featured Repos
 
+> Auto-updates via GitHub API pins — star what matters, it surfaces here.
+
+<div align="center">
+
+[![ReadMe Card](https://github-readme-stats.vercel.app/api/pin/?username=VOIDENMARK&repo=voidenmark.github.io&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&icon_color=00ff88)](https://github.com/VOIDENMARK/voidenmark.github.io)
+
+</div>
+
+---
 
 ## 🛠️ Free Tools Arsenal
 
@@ -205,17 +215,7 @@ export default {
 
 <div align="center">
 
-[![neverneer's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=neverneer&bg_color=0d0d0d&color=00ff88&line=00ff88&point=ffffff&area=true&hide_border=true)](https://github.com/neverneer)
-
-</div>
-
----
-
-## 🏆 GitHub Trophies
-
-<div align="center">
-
-[![trophy](https://github-profile-trophy.vercel.app/?username=neverneer&theme=darkhub&no-frame=true&no-bg=true&margin-w=6&column=7)](https://github.com/ryo-ma/github-profile-trophy)
+[![VOIDENMARK's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=VOIDENMARK&bg_color=0d0d0d&color=00ff88&line=00ff88&point=ffffff&area=true&hide_border=true)](https://github.com/VOIDENMARK)
 
 </div>
 
@@ -223,7 +223,7 @@ export default {
 
 <div align="center">
 
-<img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=dark&quote=The%20best%20tool%20is%20the%20one%20that%20doesn%27t%20cost%20you%20your%20freedom.&author=neverneer" />
+<img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=dark&quote=The%20best%20tool%20is%20the%20one%20that%20doesn%27t%20cost%20you%20your%20freedom.&author=VOIDENMARK" />
 
 <br/><br/>
 
