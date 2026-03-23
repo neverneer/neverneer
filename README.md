@@ -58,17 +58,7 @@
 
 ---
 
-## 🚀 Featured Repos
 
-> Auto-updates via GitHub API pins — star what matters, it surfaces here.
-
-<div align="center">
-
-[![ReadMe Card](https://github-readme-stats.vercel.app/api/pin/?username=neverneer&repo=neverneer.github.io&theme=github_dark&hide_border=true&bg_color=0d0d0d&title_color=ffffff&icon_color=00ff88)](https://github.com/neverneer/neverneer.github.io)
-
-</div>
-
----
 
 ## 🛠️ Free Tools Arsenal
 
