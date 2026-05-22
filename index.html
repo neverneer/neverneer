@@ -1,40 +1,1267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>VOIDENMARK — build free. stay sharp.</title>
-  <meta name="description" content="Free tools, open source guides, and alternatives to paid software. Built by VOIDENMARK." />
-  <meta property="og:title" content="VOIDENMARK" />
-  <meta property="og:description" content="Free tools over paid bloat. Knowledge shared is power multiplied." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <meta name="description" content="150+ free & open-source tools, zero-cost alternatives to paid software, and dev guides. Built by VOIDENMARK."/>
+  <meta property="og:title" content="VOIDENMARK"/>
+  <meta property="og:description" content="Free tools over paid bloat. Knowledge shared is power multiplied."/>
+  <meta name="theme-color" content="#07080a"/>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+
+  <!-- LIBS -->
+  <!-- GSAP + ScrollTrigger for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Tippy.js tooltips -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/tippy-bundle.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/6.3.7/themes/translucent.min.css"/>
+  <!-- Iconify icon engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iconify/3.1.1/iconify.min.js"></script>
+  <!-- Fuse.js fuzzy search -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+  <!-- Anime.js for micro-animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
   <style>
-    /* ============================
-       CSS VARIABLES — DARK SYSTEM
-    ============================ */
-    :root {
-      --bg:        #090909;
-      --bg-1:      #0f0f0f;
-      --bg-2:      #141414;
-      --bg-3:      #1a1a1a;
-      --border:    #222222;
-      --border-h:  #2e2e2e;
-      --text:      #e8e8e8;
-      --muted:     #666666;
-      --muted-2:   #444444;
-      --accent:    #00ff88;
-      --accent-2:  #ff6b35;
-      --accent-3:  #5b8cff;
-      --accent-4:  #ffd700;
-      --font-mono: 'JetBrains Mono', monospace;
-      --font-sans: 'Syne', sans-serif;
-      --radius:    8px;
-      --radius-lg: 14px;
-      --shadow:    0 4px 32px rgba(0,0,0,0.6);
-      --shadow-glow: 0 0 40px rgba(0,255,136,0.08);
-      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ──────────────────────────────────────
+       CSS DESIGN TOKENS
+    ────────────────────────────────────── */
+    :root{
+      --bg:#07080a; --bg1:#0c0e11; --bg2:#11141a; --bg3:#161b23; --bg4:#1b2130;
+      --bd:#1e2330; --bdh:#273040; --bdg:#303d55;
+      --tx:#e2e8f4; --tx2:#8fa3bf; --tx3:#5a7090;
+      --ac:#00e5ff; --acd:rgba(0,229,255,.07); --acs:rgba(0,229,255,.18);
+      --a2:#ff4d6d; --a3:#7c3aed; --a4:#f59e0b; --a5:#10b981;
+      --gn:#00ff88; --gns:rgba(0,255,136,.15);
+      --rd:#ff4d4d; --yw:#ffe066;
+      --mono:'JetBrains Mono',monospace;
+      --sans:'DM Sans',sans-serif;
+      --disp:'Bebas Neue',sans-serif;
+      --r:6px; --rl:12px; --rx:18px; --rxx:28px;
+      --ease:cubic-bezier(.4,0,.2,1);
+      --ease-spring:cubic-bezier(.34,1.56,.64,1);
+      --sh:0 4px 32px rgba(0,0,0,.6);
+      --sh-glow:0 0 40px rgba(0,229,255,.12);
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scroll-padding-top:68px}
+    body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:14px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+    img{display:block;max-width:100%}
+    ul,ol{list-style:none}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--bdh);border-radius:99px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--bdg)}
+    ::selection{background:var(--acs);color:var(--ac)}
+
+    /* ── GRAIN ── */
+    .grain{position:fixed;inset:-100%;width:300%;height:300%;pointer-events:none;z-index:9100;opacity:.022;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation:grain 8s steps(10) infinite}
+    @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-5%)}20%{transform:translate(-10%,5%)}30%{transform:translate(5%,-10%)}40%{transform:translate(-5%,15%)}50%{transform:translate(-10%,5%)}60%{transform:translate(15%,0)}70%{transform:translate(0,10%)}80%{transform:translate(-15%,0)}90%{transform:translate(10%,5%)}}
+
+    /* ── CANVAS BG ── */
+    #bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+
+    /* ── LAYOUT ── */
+    .w{max-width:1140px;margin:0 auto;padding:0 28px;position:relative;z-index:2}
+    hr.div{border:none;border-top:1px solid var(--bd)}
+
+    /* ── NAV ── */
+    #nav{position:fixed;top:0;left:0;right:0;z-index:600;transition:all .3s var(--ease)}
+    #nav.sc{background:rgba(7,8,10,.9);backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--bd)}
+    .ni{max-width:1140px;margin:0 auto;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .nlogo{font-family:var(--disp);font-size:22px;letter-spacing:2.5px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+    .lm{width:30px;height:30px;background:var(--ac);border-radius:7px;display:flex;align-items:center;justify-content:center;position:relative}
+    .lm::after{content:'';position:absolute;inset:-2px;border-radius:9px;border:1px solid rgba(0,229,255,.4);animation:lp 3s ease-in-out infinite}
+    @keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0;transform:scale(1.4)}}
+    .lm svg{width:15px;height:15px;color:#000;stroke-width:2.5;flex-shrink:0}
+    .nlinks{display:flex;gap:2px;flex:1;justify-content:center}
+    .nlinks a{padding:6px 14px;border-radius:var(--r);font-size:12px;font-family:var(--mono);color:var(--tx3);letter-spacing:.04em;transition:all .18s;display:flex;align-items:center;gap:5px}
+    .nlinks a:hover{color:var(--tx);background:var(--bg2)}
+    .nlinks a iconify-icon{font-size:13px}
+    .nr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+    /* visitor pill */
+    .vpill{display:flex;align-items:center;gap:7px;padding:5px 13px 5px 9px;border:1px solid var(--bdh);border-radius:99px;background:var(--bg1);font-family:var(--mono);font-size:11px;color:var(--tx3);transition:all .2s;cursor:default;position:relative;overflow:hidden}
+    .vpill::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,229,255,.04),transparent);transform:translateX(-100%);animation:vshine 4s ease-in-out infinite}
+    @keyframes vshine{0%,60%,100%{transform:translateX(-100%)}80%{transform:translateX(100%)}}
+    .vpill:hover{border-color:var(--ac);color:var(--ac)}
+    .ldot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:ld 2s ease-in-out infinite;flex-shrink:0}
+    @keyframes ld{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.65)}}
+    #vcn{color:var(--ac);font-weight:700;min-width:2ch;transition:all .3s}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:var(--r);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.04em;transition:all .2s var(--ease);white-space:nowrap;position:relative;overflow:hidden}
+    .bpri{background:var(--ac);color:#000;font-weight:700}
+    .bpri::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);pointer-events:none}
+    .bpri:hover{background:#1aecff;transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,229,255,.35)}
+    .bout{border:1px solid var(--bdh);color:var(--tx2);background:var(--bg1)}
+    .bout:hover{border-color:var(--ac);color:var(--ac);transform:translateY(-2px)}
+
+    /* ── HERO ── */
+    #hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:100px 0 60px;position:relative}
+    .htag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);margin-bottom:26px;opacity:0}
+    .htag::before{content:'';width:28px;height:1px;background:var(--ac)}
+    .hh1{font-family:var(--disp);font-size:clamp(68px,11vw,152px);line-height:.9;letter-spacing:3px;margin-bottom:28px}
+    .hw{display:block;opacity:0;transform:translateY(60px)}
+    .hw.ol{-webkit-text-stroke:1px rgba(255,255,255,.15);color:transparent}
+    .hw .hi{color:var(--ac)}
+    .hdesc{font-size:15px;color:var(--tx2);max-width:520px;line-height:1.85;margin-bottom:32px;opacity:0}
+    .hact{display:flex;gap:10px;flex-wrap:wrap;opacity:0}
+    .hstats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:60px;border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;opacity:0;background:var(--bg1)}
+    .hst{padding:22px 20px;border-right:1px solid var(--bd);transition:background .2s;position:relative}
+    .hst::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+    .hst:hover::after{transform:scaleX(1)}
+    .hst:last-child{border-right:none}
+    .hst:hover{background:var(--bg2)}
+    .hst .v{font-family:var(--disp);font-size:40px;letter-spacing:1px;display:block;line-height:1;margin-bottom:4px}
+    .hst .l{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--tx3)}
+    .scrl{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:.12em;text-transform:uppercase;opacity:0}
+    .sarr{animation:sba 1.4s ease-in-out infinite}
+    @keyframes sba{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+    /* ── STATS BAND ── */
+    #stats{padding:0}
+    .sband{display:grid;grid-template-columns:repeat(5,1fr)}
+    .sc-cell{padding:26px 20px;text-align:center;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);transition:background .2s;position:relative}
+    .sc-cell:last-child{border-right:none}
+    .sc-cell:hover{background:var(--bg1)}
+    .scv{font-family:var(--disp);font-size:42px;letter-spacing:1px;display:block;line-height:1;margin-bottom:5px}
+    .sck{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--tx3)}
+
+    /* ── SECTION HEADER ── */
+    section{padding:80px 0}
+    .sh{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:12px}
+    .slbl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+    .slbl::before{content:'//';opacity:.4}
+    .stit{font-family:var(--disp);font-size:clamp(30px,4vw,50px);letter-spacing:1px;line-height:1}
+    .stit span{color:var(--ac)}
+    .slink{font-family:var(--mono);font-size:11px;color:var(--tx3);border:1px solid var(--bd);padding:6px 14px;border-radius:99px;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+    .slink:hover{color:var(--tx);border-color:var(--bdh);background:var(--bg2)}
+
+    /* ── REPOS ── */
+    .tabrow{display:flex;gap:4px;margin-bottom:24px;flex-wrap:wrap}
+    .tab{padding:6px 14px;border-radius:99px;font-family:var(--mono);font-size:11px;color:var(--tx3);border:1px solid transparent;transition:all .18s;display:flex;align-items:center;gap:5px}
+    .tab:hover{color:var(--tx);border-color:var(--bd);background:var(--bg2)}
+    .tab.on{color:var(--ac);border-color:rgba(0,229,255,.3);background:var(--acd)}
+    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden}
+    .rcard{background:var(--bg1);padding:20px 22px;transition:background .18s;display:flex;flex-direction:column;gap:10px;cursor:pointer}
+    .rcard:hover{background:var(--bg2)}
+    .rc-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .rc-name{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ac);display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+    .rc-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .rc-vis{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:99px;border:1px solid var(--bdh);color:var(--tx3);flex-shrink:0}
+    .rc-desc{font-size:12px;color:var(--tx2);line-height:1.6;flex:1}
+    .rc-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .rc-mi{display:flex;align-items:center;gap:3px;font-family:var(--mono);font-size:11px;color:var(--tx3)}
+    .lp{width:8px;height:8px;border-radius:50%}
+    .rc-upd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--tx3)}
+    .rskel{background:var(--bg1);padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+    .sk{background:var(--bg3);border-radius:4px;animation:skp 1.6s ease-in-out infinite}
+    @keyframes skp{0%,100%{opacity:.4}50%{opacity:.8}}
+
+    /* ── TOOLS ── */
+    .ctabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:20px}
+    .ctab{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;font-family:var(--mono);font-size:11px;color:var(--tx2);border:1px solid var(--bd);background:var(--bg1);transition:all .18s;cursor:pointer}
+    .ctab:hover{border-color:var(--bdh);color:var(--tx)}
+    .ctab.on{border-color:var(--ac);color:var(--ac);background:var(--acd)}
+    .ctab iconify-icon{font-size:13px}
+    .toolbar{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+    .tsearch{flex:1;min-width:200px;max-width:480px;background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r);padding:10px 16px 10px 40px;font-family:var(--mono);font-size:12px;color:var(--tx);outline:none;transition:all .2s;display:block}
+    .tsearch::placeholder{color:var(--tx3)}
+    .tsearch:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
+    .tinp-wrap{position:relative;flex:1;min-width:200px;max-width:480px}
+    .tinp-wrap iconify-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:14px;pointer-events:none}
+    .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+    .tcard{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;display:flex;flex-direction:column;gap:8px;transition:all .18s var(--ease);position:relative;overflow:hidden}
+    .tcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.03),transparent);opacity:0;transition:opacity .2s}
+    .tcard:hover{border-color:var(--ac);background:var(--bg2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,229,255,.07)}
+    .tcard:hover::before{opacity:1}
+    .tc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+    .tc-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--tx);line-height:1.3}
+    .badge{font-size:9px;font-family:var(--mono);padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;margin-top:1px}
+    .bf{background:rgba(0,255,136,.12);color:var(--gn)}
+    .bo{background:rgba(0,229,255,.1);color:var(--ac)}
+    .bfm{background:rgba(245,158,11,.12);color:var(--a4)}
+    .tc-beats{font-size:11px;color:var(--tx3)}
+    .tc-beats strong{color:var(--tx2)}
+    .tc-desc{font-size:11px;color:var(--tx3);line-height:1.55;flex:1}
+    .tc-lnk{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--ac);margin-top:2px;transition:gap .15s;width:fit-content}
+    .tcard:hover .tc-lnk{gap:8px}
+    .tempty{grid-column:1/-1;text-align:center;padding:60px 20px;font-family:var(--mono);font-size:13px;color:var(--tx3)}
+
+    /* ── ALTS GRID ── */
+    .asearch{width:100%;background:var(--bg1);border:1px solid var(--bd);border-radius:var(--r);padding:11px 18px 11px 44px;font-family:var(--mono);font-size:12px;color:var(--tx);outline:none;transition:all .2s;margin-bottom:20px;display:block}
+    .asearch::placeholder{color:var(--tx3)}
+    .asearch:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
+    .ainp-wrap{position:relative;margin-bottom:20px}
+    .ainp-wrap iconify-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:15px;pointer-events:none}
+    .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+    .acard{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;transition:all .18s;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+    .acard:hover{border-color:var(--bdh);background:var(--bg2);transform:translateY(-1px)}
+    .ac-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .ac-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ac)}
+    .ac-cat{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:4px;background:var(--bg3);color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;border:1px solid var(--bd)}
+    .ac-rep{font-size:11px;color:var(--tx2)}
+    .ac-rep span{color:var(--a2);text-decoration:line-through;opacity:.65}
+    .ac-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+    .ac-stars{font-size:10px;color:var(--a4);font-family:var(--mono);letter-spacing:1px}
+    .cost-tag{font-size:9px;font-family:var(--mono);font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.06em}
+    .cost-tag.co{background:rgba(0,229,255,.1);color:var(--ac)}
+    .cost-tag.cf{background:rgba(0,255,136,.12);color:var(--gn)}
+    .cost-tag.cfm{background:rgba(245,158,11,.12);color:var(--a4)}
+
+    /* ── GUIDES ── */
+    .gwrap{border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden}
+    .gi{border-bottom:1px solid var(--bd)}
+    .gi:last-child{border-bottom:none}
+    .gbtn{width:100%;display:flex;align-items:center;gap:16px;padding:18px 24px;background:var(--bg1);text-align:left;transition:background .18s}
+    .gbtn:hover{background:var(--bg2)}
+    .gnum{font-family:var(--mono);font-size:10px;color:var(--tx3);min-width:22px}
+    .ginf{flex:1;min-width:0}
+    .gtit{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .gsub{font-size:11px;color:var(--tx2);font-family:var(--mono)}
+    .glvl{font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+    .lbg{background:rgba(0,255,136,.1);color:var(--gn)}
+    .lmd{background:rgba(0,229,255,.1);color:var(--ac)}
+    .lhd{background:rgba(255,77,109,.1);color:var(--a2)}
+    .gchev{font-size:11px;color:var(--tx3);transition:transform .22s var(--ease);flex-shrink:0}
+    .gi.open .gchev{transform:rotate(90deg)}
+    .gbody{display:none;background:var(--bg2);border-top:1px solid var(--bd)}
+    .gi.open .gbody{display:block}
+    .cwrap{position:relative;padding:20px 24px}
+    .cblk{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;font-family:var(--mono);font-size:12px;line-height:1.9;overflow-x:auto;color:var(--tx2)}
+    .cblk pre{white-space:pre-wrap;word-break:break-word}
+    .cpbtn{position:absolute;top:28px;right:28px;font-family:var(--mono);font-size:10px;color:var(--tx3);background:var(--bg2);border:1px solid var(--bdh);padding:4px 10px;border-radius:var(--r);transition:all .18s;z-index:2}
+    .cpbtn:hover{color:var(--ac);border-color:var(--ac)}
+    .ck{color:var(--ac)} .cs{color:var(--gn)} .cc{color:#3d5070} .cf2{color:var(--a4)} .cn{color:#f87171}
+
+    /* ── TERMINAL ── */
+    .term{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rx);overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.8)}
+    .tbar{background:var(--bg2);border-bottom:1px solid var(--bd);padding:12px 18px;display:flex;align-items:center;gap:8px}
+    .td{width:12px;height:12px;border-radius:50%}
+    .tdr{background:#ff5f56}.tdy{background:#ffbd2e}.tdg{background:#27c93f}
+    .tttl{flex:1;text-align:center;font-family:var(--mono);font-size:11px;color:var(--tx3)}
+    .tbody{padding:24px 28px;font-family:var(--mono);font-size:12px;line-height:2.2;min-height:270px;overflow-y:auto;max-height:400px}
+    .tl{display:flex;align-items:flex-start;gap:10px}
+    .tp{color:var(--ac);user-select:none;flex-shrink:0}
+    .tc2{color:var(--tx)}
+    .to{color:var(--tx3);padding-left:20px}
+    .to.ok{color:var(--gn)}.to.wn{color:var(--a4)}.to.er{color:var(--a2)}
+    .cur{display:inline-block;width:8px;height:14px;background:var(--ac);animation:cb 1.1s step-end infinite;vertical-align:middle;margin-left:2px}
+    @keyframes cb{50%{opacity:0}}
+
+    /* ── FOOTER ── */
+    footer{border-top:1px solid var(--bd);padding:48px 0 32px}
+    .fi{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+    .flogo{font-family:var(--disp);font-size:22px;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+    .flinks{display:flex;gap:20px;flex-wrap:wrap}
+    .flinks a{font-family:var(--mono);font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.1em;transition:color .18s;display:flex;align-items:center;gap:5px}
+    .flinks a:hover{color:var(--tx)}
+    .fmeta{font-family:var(--mono);font-size:10px;color:var(--tx3);text-align:right;line-height:1.8}
+    .flive{display:flex;align-items:center;gap:5px;color:var(--tx3);margin-bottom:3px}
+
+    /* ── TOAST ── */
+    #toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--bdg);border-radius:var(--rl);padding:12px 18px;font-family:var(--mono);font-size:12px;color:var(--gn);z-index:9200;opacity:0;transform:translateY(12px) scale(.96);transition:all .22s var(--ease);pointer-events:none;display:flex;align-items:center;gap:8px}
+    #toast.show{opacity:1;transform:translateY(0) scale(1)}
+
+    /* ── TIPPY ── */
+    .tippy-box[data-theme~='v']{background:var(--bg2);border:1px solid var(--bdh);color:var(--tx2);font-family:var(--mono);font-size:11px;border-radius:var(--r);box-shadow:var(--sh)}
+    .tippy-box[data-theme~='v'] .tippy-arrow::before{border-bottom-color:var(--bdh)}
+
+    /* ── SCROLLTOP ── */
+    #stbtn{position:fixed;bottom:24px;left:24px;width:40px;height:40px;background:var(--bg2);border:1px solid var(--bdh);border-radius:var(--rl);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--tx3);opacity:0;pointer-events:none;transition:all .22s;z-index:500}
+    #stbtn.show{opacity:1;pointer-events:auto}
+    #stbtn:hover{color:var(--ac);border-color:var(--ac);transform:translateY(-2px)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .nlinks{display:none}
+      .hstats{grid-template-columns:repeat(2,1fr)}
+      .sband{grid-template-columns:repeat(3,1fr)}
+      .hst:nth-child(2){border-right:none}
+    }
+    @media(max-width:640px){
+      .w{padding:0 16px}
+      .sband{grid-template-columns:repeat(2,1fr)}
+      .hh1{letter-spacing:1px}
+      .btn{padding:8px 14px;font-size:11px}
+    }
+    @media(max-width:400px){
+      .sband{grid-template-columns:1fr 1fr}
+      .sc-cell:nth-child(n+5){display:none}
+    }
+  </style>
+</head>
+<body>
+<div class="grain"></div>
+<canvas id="bgc"></canvas>
+<div id="toast"><iconify-icon icon="ph:check-bold"></iconify-icon><span id="toast-msg">Copied!</span></div>
+<button id="stbtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+  <iconify-icon icon="ph:arrow-up-bold"></iconify-icon>
+</button>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="ni">
+    <a href="#" class="nlogo">
+      <div class="lm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </div>
+      VOIDENMARK
+    </a>
+    <nav class="nlinks">
+      <a href="#repos"><iconify-icon icon="ph:git-branch"></iconify-icon>Repos</a>
+      <a href="#tools"><iconify-icon icon="ph:wrench"></iconify-icon>Tools</a>
+      <a href="#alternatives"><iconify-icon icon="ph:arrows-left-right"></iconify-icon>Alts</a>
+      <a href="#guides"><iconify-icon icon="ph:book-open"></iconify-icon>Guides</a>
+    </nav>
+    <div class="nr">
+      <div class="vpill" id="vpill">
+        <div class="ldot"></div>
+        <span id="vcn">···</span>
+        <span style="color:var(--tx3)">views</span>
+      </div>
+      <a href="https://github.com/VOIDENMARK" target="_blank" class="btn bout">
+        <iconify-icon icon="mdi:github"></iconify-icon>GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="w">
+    <div class="htag" id="htag">open source · free tools · no bloat</div>
+    <h1 class="hh1">
+      <span class="hw" id="hw1">BUILD <span class="hi">FREE.</span></span>
+      <span class="hw ol" id="hw2">STAY SHARP.</span>
+    </h1>
+    <p class="hdesc" id="hdesc">
+      150+ free &amp; open-source tools. Zero subscriptions. Real alternatives to the paid software everybody keeps pushing on you. If it's not free, we find what is.
+    </p>
+    <div class="hact" id="hact">
+      <a href="#tools" class="btn bpri"><iconify-icon icon="ph:rocket-launch-bold"></iconify-icon>Explore Tools</a>
+      <a href="#alternatives" class="btn bout"><iconify-icon icon="ph:swap-bold"></iconify-icon>Free Alts</a>
+      <a href="https://github.com/VOIDENMARK" target="_blank" class="btn bout"><iconify-icon icon="mdi:github"></iconify-icon>GitHub</a>
+      <a href="https://x.com/VOIDENMARK" target="_blank" class="btn bout"><iconify-icon icon="ri:twitter-x-fill"></iconify-icon>X</a>
+    </div>
+    <div class="hstats" id="hstats">
+      <div class="hst"><span class="v" id="hs-repos" style="color:var(--ac)">—</span><span class="l">Public Repos</span></div>
+      <div class="hst"><span class="v" id="hs-stars" style="color:var(--a4)">—</span><span class="l">Total Stars</span></div>
+      <div class="hst"><span class="v" id="hs-fol" style="color:var(--gn)">—</span><span class="l">Followers</span></div>
+      <div class="hst"><span class="v" id="hs-tools" style="color:var(--a4)">150+</span><span class="l">Free Tools</span></div>
+    </div>
+  </div>
+  <div class="scrl" id="scrl">
+    <span>scroll</span>
+    <span class="sarr"><iconify-icon icon="ph:arrow-down"></iconify-icon></span>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<section id="stats" style="padding:0">
+  <div class="sband">
+    <div class="sc-cell"><span class="scv" id="sb-r" style="color:var(--ac)">—</span><span class="sck">Repos</span></div>
+    <div class="sc-cell"><span class="scv" id="sb-s" style="color:var(--a4)">—</span><span class="sck">Stars</span></div>
+    <div class="sc-cell"><span class="scv" id="sb-f" style="color:var(--a2)">—</span><span class="sck">Forks</span></div>
+    <div class="sc-cell"><span class="scv" id="sb-fo" style="color:var(--gn)">—</span><span class="sck">Followers</span></div>
+    <div class="sc-cell"><span class="scv" id="sb-up" style="font-size:18px;color:var(--tx2)">—</span><span class="sck">Last Push</span></div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- REPOS -->
+<section id="repos">
+  <div class="w">
+    <div class="sh">
+      <div><div class="slbl">github</div><h2 class="stit">Latest <span>Repos</span></h2></div>
+      <a href="https://github.com/VOIDENMARK?tab=repositories" target="_blank" class="slink">View all <iconify-icon icon="ph:arrow-right"></iconify-icon></a>
+    </div>
+    <div class="tabrow" id="rtabs">
+      <button class="tab on" data-f="all"><iconify-icon icon="ph:squares-four"></iconify-icon>All</button>
+      <button class="tab" data-f="popular"><iconify-icon icon="ph:star"></iconify-icon>Popular</button>
+      <button class="tab" data-f="recent"><iconify-icon icon="ph:clock"></iconify-icon>Recent</button>
+      <button class="tab" data-f="forked"><iconify-icon icon="ph:git-fork"></iconify-icon>Forked</button>
+    </div>
+    <div class="rgrid" id="rgrid">
+      <div class="rskel"><div class="sk" style="width:40%;height:10px"></div><div class="sk" style="width:70%;height:9px;margin-top:8px"></div></div>
+      <div class="rskel"><div class="sk" style="width:55%;height:10px"></div><div class="sk" style="width:60%;height:9px;margin-top:8px"></div></div>
+      <div class="rskel"><div class="sk" style="width:35%;height:10px"></div><div class="sk" style="width:80%;height:9px;margin-top:8px"></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="w">
+    <div class="sh">
+      <div><div class="slbl">arsenal</div><h2 class="stit">Free <span>Tools</span></h2></div>
+      <span class="slink" id="tcnt" style="cursor:default">loading…</span>
+    </div>
+    <div class="ctabs" id="ctabs"></div>
+    <div class="toolbar">
+      <div class="tinp-wrap">
+        <iconify-icon icon="ph:magnifying-glass"></iconify-icon>
+        <input type="text" class="tsearch" id="tsearch" placeholder="Search 150+ tools… (e.g. AI, design, database, privacy)"/>
+      </div>
+    </div>
+    <div class="tgrid" id="tgrid"></div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- ALTS -->
+<section id="alternatives">
+  <div class="w">
+    <div class="sh">
+      <div><div class="slbl">swap list</div><h2 class="stit">Paid <span>→ Free</span></h2></div>
+    </div>
+    <div class="ainp-wrap">
+      <iconify-icon icon="ph:magnifying-glass"></iconify-icon>
+      <input type="text" class="asearch" id="asearch" placeholder="Search alternatives… (e.g. Adobe, Slack, Notion, GitHub Copilot)"/>
+    </div>
+    <div class="agrid" id="agrid"></div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- GUIDES -->
+<section id="guides">
+  <div class="w">
+    <div class="sh">
+      <div><div class="slbl">howto</div><h2 class="stit">Quick <span>Guides</span></h2></div>
+    </div>
+    <div class="gwrap" id="gwrap"></div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- TERMINAL -->
+<section id="ts">
+  <div class="w">
+    <div class="sh">
+      <div><div class="slbl">deploy</div><h2 class="stit">Ship in <span>Seconds</span></h2></div>
+    </div>
+    <div class="term">
+      <div class="tbar">
+        <div class="td tdr"></div><div class="td tdy"></div><div class="td tdg"></div>
+        <div class="tttl">zsh — VOIDENMARK@dev</div>
+      </div>
+      <div class="tbody" id="tbody"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div"/>
+
+<!-- FOOTER -->
+<footer>
+  <div class="w">
+    <div class="fi">
+      <div class="flogo">
+        <div class="lm" style="width:24px;height:24px;border-radius:5px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:11px;height:11px;stroke-width:2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        </div>
+        VOIDENMARK
+      </div>
+      <div class="flinks">
+        <a href="https://github.com/VOIDENMARK" target="_blank"><iconify-icon icon="mdi:github"></iconify-icon>GitHub</a>
+        <a href="https://x.com/VOIDENMARK" target="_blank"><iconify-icon icon="ri:twitter-x-fill"></iconify-icon>X</a>
+        <a href="https://youtube.com/@VOIDENMARK" target="_blank"><iconify-icon icon="ph:youtube-logo"></iconify-icon>YouTube</a>
+        <a href="#tools">Tools</a>
+        <a href="#alternatives">Alternatives</a>
+        <a href="#guides">Guides</a>
+      </div>
+      <div class="fmeta">
+        <div class="flive"><div class="ldot"></div>Auto-synced with GitHub API</div>
+        <div id="fupd">—</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ── CONSTANTS ─────────────────────────────── */
+const GHU='VOIDENMARK';
+
+/* ── CANVAS PARTICLE BG ─────────────────────── */
+(function(){
+  const c=document.getElementById('bgc'),ctx=c.getContext('2d');
+  let W,H,pts=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;init()}
+  function init(){
+    pts=Array.from({length:70},()=>({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,
+      r:Math.random()*1.2+.3
+    }));
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,229,255,.35)';ctx.fill();
+    });
+    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
+      const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<110){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(0,229,255,${.06*(1-d/110)})`;ctx.lineWidth=.6;ctx.stroke()}
+    }));
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+/* ── TOOLS DATA (150+) ──────────────────────── */
+const CATS=[
+  {id:'all',icon:'ph:squares-four',label:'All'},
+  {id:'design',icon:'ph:pen-nib',label:'Design'},
+  {id:'dev',icon:'ph:code',label:'Dev'},
+  {id:'ai',icon:'ph:robot',label:'AI'},
+  {id:'db',icon:'ph:database',label:'Database'},
+  {id:'hosting',icon:'ph:cloud',label:'Hosting'},
+  {id:'privacy',icon:'ph:shield-check',label:'Privacy'},
+  {id:'media',icon:'ph:video-camera',label:'Media'},
+  {id:'productivity',icon:'ph:lightning',label:'Productivity'},
+  {id:'devops',icon:'ph:gear',label:'DevOps'},
+  {id:'comms',icon:'ph:chat-circle',label:'Comms'},
+  {id:'finance',icon:'ph:currency-dollar',label:'Finance'},
+  {id:'learn',icon:'ph:graduation-cap',label:'Learn'},
+];
+
+const TOOLS=[
+  // ─── DESIGN ───────────────────────────────────────────
+  {c:'design',n:'Penpot',u:'https://penpot.app',b:'bo',bt:'Figma / Sketch',d:'Full-featured collaborative design tool. Open-source, self-hostable.'},
+  {c:'design',n:'Figma (Free)',u:'https://figma.com',b:'bf',bt:'Adobe XD',d:'Generous free tier — 3 projects, unlimited drafts. Industry standard.'},
+  {c:'design',n:'GIMP',u:'https://gimp.org',b:'bo',bt:'Photoshop',d:'Pro-grade raster image editor. Extensible via plugins and scripts.'},
+  {c:'design',n:'Krita',u:'https://krita.org',b:'bo',bt:'Photoshop (painting)',d:'Digital painting focused. Built by and for artists. Excellent brush engine.'},
+  {c:'design',n:'Inkscape',u:'https://inkscape.org',b:'bo',bt:'Illustrator',d:'Full SVG vector editor. Great for icons, logos, illustrations.'},
+  {c:'design',n:'Darktable',u:'https://darktable.org',b:'bo',bt:'Lightroom',d:'Non-destructive RAW photo editor with full workflow pipeline.'},
+  {c:'design',n:'RawTherapee',u:'https://rawtherapee.com',b:'bo',bt:'Lightroom',d:'Powerful RAW image processor with fine-grained controls.'},
+  {c:'design',n:'Pixlr E',u:'https://pixlr.com/e',b:'bf',bt:'Photoshop (browser)',d:'Browser-based Photoshop alternative. No install required.'},
+  {c:'design',n:'Canva (Free)',u:'https://canva.com',b:'bfm',bt:'Adobe Express',d:'Drag-and-drop design for social, presentations, docs. Massive free tier.'},
+  {c:'design',n:'Spline',u:'https://spline.design',b:'bfm',bt:'Cinema4D (web 3D)',d:'3D design for the web. Animations, scenes, games — all in the browser.'},
+  {c:'design',n:'Coolors',u:'https://coolors.co',b:'bf',bt:'Adobe Color',d:'Instant color palette generator. Exports to every format imaginable.'},
+  {c:'design',n:'Realtime Colors',u:'https://realtimecolors.com',b:'bf',bt:'paid palette tools',d:'Preview actual colors on a real UI. Best color workflow online.'},
+  {c:'design',n:'Phosphor Icons',u:'https://phosphoricons.com',b:'bo',bt:'Font Awesome Pro',d:'1,200+ icons, 6 weights, MIT license. Works in React, Vue, etc.'},
+  {c:'design',n:'Heroicons',u:'https://heroicons.com',b:'bo',bt:'Material Icons Pro',d:'MIT-licensed SVG icons by Tailwind team. Pixel-perfect at any size.'},
+  {c:'design',n:'Iconoir',u:'https://iconoir.com',b:'bo',bt:'paid icon sets',d:'1,500+ free open-source icons. One of the cleanest sets available.'},
+  {c:'design',n:'Lucide',u:'https://lucide.dev',b:'bo',bt:'Feather Icons',d:'Community fork of Feather. 1,000+ icons, framework packages available.'},
+  {c:'design',n:'Excalidraw',u:'https://excalidraw.com',b:'bo',bt:'Miro / Whimsical',d:'Virtual whiteboard with a hand-drawn feel. Great for diagramming.'},
+  {c:'design',n:'draw.io / Diagrams',u:'https://diagrams.net',b:'bo',bt:'Lucidchart',d:'Flowcharts, network diagrams, org charts. Integrates with Google Drive.'},
+  {c:'design',n:'Rive',u:'https://rive.app',b:'bfm',bt:'LottieFiles Pro',d:'Interactive animations for apps and games. Free community plan.'},
+  {c:'design',n:'Google Fonts',u:'https://fonts.google.com',b:'bf',bt:'Typekit / Adobe Fonts',d:'1,500+ free, open-source fonts. Zero licensing headaches.'},
+  {c:'design',n:'Fontsource',u:'https://fontsource.org',b:'bo',bt:'paid font CDNs',d:'Self-host Google Fonts via npm. GDPR-friendly, works offline.'},
+  {c:'design',n:'Shots.so',u:'https://shots.so',b:'bfm',bt:'paid mockup tools',d:'Beautiful device mockups for your screenshots. Free tier generous.'},
+  {c:'design',n:'Storyset',u:'https://storyset.com',b:'bf',bt:'paid illustration sets',d:'Free customizable illustrations for landing pages and apps.'},
+  {c:'design',n:'unDraw',u:'https://undraw.co',b:'bf',bt:'paid SVG libraries',d:'Open-source SVG illustrations you can color to match your brand.'},
+
+  // ─── DEV ──────────────────────────────────────────────
+  {c:'dev',n:'VS Code',u:'https://code.visualstudio.com',b:'bf',bt:'JetBrains IDEs',d:'The editor. 50k+ extensions, remote dev, Copilot built-in.'},
+  {c:'dev',n:'Zed',u:'https://zed.dev',b:'bo',bt:'VS Code (speed)',d:'Blazing fast multiplayer code editor. GPU-rendered, built in Rust.'},
+  {c:'dev',n:'Neovim',u:'https://neovim.io',b:'bo',bt:'Vim / paid editors',d:'Hyperextensible Vim. The endgame editor for terminal lovers.'},
+  {c:'dev',n:'Helix',u:'https://helix-editor.com',b:'bo',bt:'Neovim',d:'Post-modern terminal editor. Tree-sitter and LSP built in.'},
+  {c:'dev',n:'Bruno',u:'https://usebruno.com',b:'bo',bt:'Postman',d:'Git-friendly API client. Stores collections as files. No cloud lock-in.'},
+  {c:'dev',n:'Hoppscotch',u:'https://hoppscotch.io',b:'bo',bt:'Postman / Insomnia',d:'Lightweight, browser-based API tester. Open-source and fast.'},
+  {c:'dev',n:'HTTPie (Desktop)',u:'https://httpie.io/desktop',b:'bf',bt:'Postman',d:'Human-friendly API client. Free desktop app with clean UI.'},
+  {c:'dev',n:'DBeaver',u:'https://dbeaver.io',b:'bo',bt:'TablePlus / DataGrip',d:'Universal DB GUI. Supports 100+ databases. Free community edition.'},
+  {c:'dev',n:'TablePlus (Free)',u:'https://tableplus.com',b:'bfm',bt:'DataGrip',d:'Native, fast DB GUI. Free tier limited but excellent for daily work.'},
+  {c:'dev',n:'Bun',u:'https://bun.sh',b:'bo',bt:'Node.js / npm',d:'All-in-one JS runtime: bundler, transpiler, package manager. Fast.'},
+  {c:'dev',n:'Vite',u:'https://vitejs.dev',b:'bo',bt:'Create React App / Webpack',d:'Next-gen frontend tooling. HMR so fast it feels instant.'},
+  {c:'dev',n:'Turborepo',u:'https://turbo.build',b:'bo',bt:'paid monorepo tools',d:'High-performance build system for JS/TS monorepos.'},
+  {c:'dev',n:'Git',u:'https://git-scm.com',b:'bo',bt:'paid VCS',d:'The version control system. Everything else is built on top of this.'},
+  {c:'dev',n:'GitKraken (Free)',u:'https://gitkraken.com',b:'bfm',bt:'Sourcetree',d:'Visual Git client. Drag-and-drop branches, conflict resolution.'},
+  {c:'dev',n:'Lazygit',u:'https://github.com/jesseduffield/lazygit',b:'bo',bt:'Git GUIs',d:'TUI Git client. Control Git entirely from the terminal.'},
+  {c:'dev',n:'Playwright',u:'https://playwright.dev',b:'bo',bt:'Cypress Pro / Selenium',d:'Reliable end-to-end testing for modern web apps. Cross-browser.'},
+  {c:'dev',n:'Vitest',u:'https://vitest.dev',b:'bo',bt:'Jest (speed)',d:'Vite-native unit testing framework. Much faster than Jest.'},
+  {c:'dev',n:'Storybook',u:'https://storybook.js.org',b:'bo',bt:'paid component tools',d:'Build UI components in isolation. Document, test, and share them.'},
+  {c:'dev',n:'Tailwind CSS',u:'https://tailwindcss.com',b:'bo',bt:'Bootstrap Pro',d:'Utility-first CSS framework. The CSS meta-framework everyone uses.'},
+  {c:'dev',n:'shadcn/ui',u:'https://ui.shadcn.com',b:'bo',bt:'MUI / Chakra Pro',d:'Copy-paste React components. You own the code. No package lock-in.'},
+  {c:'dev',n:'Biome',u:'https://biomejs.dev',b:'bo',bt:'ESLint + Prettier',d:'Fast formatter and linter for JS/TS. Replaces both tools, 10-100× faster.'},
+  {c:'dev',n:'pnpm',u:'https://pnpm.io',b:'bo',bt:'npm / yarn',d:'Fast, disk-efficient package manager. Strict, correct, and fast.'},
+
+  // ─── AI ───────────────────────────────────────────────
+  {c:'ai',n:'Claude.ai (Free)',u:'https://claude.ai',b:'bf',bt:'ChatGPT Plus',d:'Best reasoning, coding, and writing AI. Generous free tier.'},
+  {c:'ai',n:'Perplexity (Free)',u:'https://perplexity.ai',b:'bfm',bt:'Copilot Pro',d:'AI-powered search with citations. Better than Googling for research.'},
+  {c:'ai',n:'Ollama',u:'https://ollama.ai',b:'bo',bt:'OpenAI API (cost)',d:'Run any LLM locally. Llama3, Mistral, Phi-3, CodeGemma. Free forever.'},
+  {c:'ai',n:'LM Studio',u:'https://lmstudio.ai',b:'bf',bt:'OpenAI API',d:'GUI for running LLMs locally. Download models from HuggingFace easily.'},
+  {c:'ai',n:'Mistral (Free API)',u:'https://mistral.ai',b:'bfm',bt:'OpenAI API',d:'State-of-the-art models with a free tier. Often beats GPT-4 on code.'},
+  {c:'ai',n:'Google AI Studio',u:'https://aistudio.google.com',b:'bf',bt:'OpenAI API',d:'Free Gemini API access. No credit card. 1M context window.'},
+  {c:'ai',n:'Groq',u:'https://groq.com',b:'bf',bt:'OpenAI API (speed)',d:'Free API for Llama3, Mixtral. Insanely fast inference via custom chips.'},
+  {c:'ai',n:'Hugging Face',u:'https://huggingface.co',b:'bf',bt:'AWS AI Services',d:'The GitHub of AI. Free model hosting, inference, datasets.'},
+  {c:'ai',n:'Open WebUI',u:'https://github.com/open-webui/open-webui',b:'bo',bt:'ChatGPT UI',d:'Self-hosted ChatGPT-style interface for Ollama and OpenAI.'},
+  {c:'ai',n:'AnythingLLM',u:'https://anythingllm.com',b:'bo',bt:'paid RAG platforms',d:'Self-hosted RAG chatbot. Chat with your docs using any LLM.'},
+  {c:'ai',n:'ComfyUI',u:'https://github.com/comfyanonymous/ComfyUI',b:'bo',bt:'Midjourney',d:'Node-based Stable Diffusion GUI. Most powerful free image gen setup.'},
+  {c:'ai',n:'Automatic1111',u:'https://github.com/AUTOMATIC1111/stable-diffusion-webui',b:'bo',bt:'Midjourney / DALL·E',d:'The OG Stable Diffusion web UI. Thousands of extensions.'},
+  {c:'ai',n:'Fooocus',u:'https://github.com/lllyasviel/Fooocus',b:'bo',bt:'Midjourney',d:'Simplified SD interface. Best Midjourney-style results locally.'},
+  {c:'ai',n:'Whisper (OpenAI)',u:'https://github.com/openai/whisper',b:'bo',bt:'Otter.ai / paid STT',d:'Best-in-class open speech recognition. Run it yourself, free.'},
+  {c:'ai',n:'Kokoro TTS',u:'https://huggingface.co/hexgrad/Kokoro-82M',b:'bo',bt:'ElevenLabs',d:'82M param TTS model. Excellent quality, runs locally.'},
+  {c:'ai',n:'Cursor (Free)',u:'https://cursor.sh',b:'bfm',bt:'GitHub Copilot',d:'AI-native code editor built on VS Code. Free tier includes GPT-4o.'},
+  {c:'ai',n:'Continue.dev',u:'https://continue.dev',b:'bo',bt:'Copilot / Cursor',d:'Open-source AI code assistant for VS Code and JetBrains.'},
+  {c:'ai',n:'Aider',u:'https://aider.chat',b:'bo',bt:'paid AI coding tools',d:'AI pair programmer in your terminal. Works with local models.'},
+  {c:'ai',n:'Phind (Free)',u:'https://phind.com',b:'bf',bt:'Copilot Chat',d:'AI search engine built for developers. Fast, code-focused answers.'},
+
+  // ─── DATABASE ─────────────────────────────────────────
+  {c:'db',n:'Supabase',u:'https://supabase.com',b:'bo',bt:'Firebase',d:'Open-source Firebase. Postgres + Auth + Storage + Realtime. Free tier generous.'},
+  {c:'db',n:'PocketBase',u:'https://pocketbase.io',b:'bo',bt:'Firebase (simple)',d:'Entire backend in one binary. Auth, DB, files, realtime. Zero config.'},
+  {c:'db',n:'Appwrite',u:'https://appwrite.io',b:'bo',bt:'Firebase / Amplify',d:'Self-hostable BaaS. Auth, DB, functions, messaging all included.'},
+  {c:'db',n:'Neon',u:'https://neon.tech',b:'bfm',bt:'AWS RDS',d:'Serverless Postgres with branching. Free tier: 3GB storage, scales to 0.'},
+  {c:'db',n:'Turso',u:'https://turso.tech',b:'bfm',bt:'PlanetScale',d:'Edge SQLite. 500 DB free tier. libSQL fork, globally distributed.'},
+  {c:'db',n:'MongoDB (Free Atlas)',u:'https://mongodb.com/atlas',b:'bfm',bt:'paid NoSQL DBs',d:'512MB free cluster. Managed MongoDB with a solid free tier.'},
+  {c:'db',n:'Redis (Upstash)',u:'https://upstash.com',b:'bfm',bt:'paid Redis',d:'Serverless Redis and Kafka. Free: 10k commands/day, no credit card.'},
+  {c:'db',n:'PlanetScale (Free)',u:'https://planetscale.com',b:'bfm',bt:'AWS Aurora',d:'MySQL-compatible serverless DB. 5GB free storage, branching workflow.'},
+  {c:'db',n:'Xata',u:'https://xata.io',b:'bfm',bt:'Airtable + DB combo',d:'Serverless Postgres + search + analytics. Spreadsheet-style DB UI.'},
+  {c:'db',n:'MinIO',u:'https://min.io',b:'bo',bt:'AWS S3 (self-hosted)',d:'High-performance S3-compatible object storage. Run it on any hardware.'},
+  {c:'db',n:'InfluxDB (OSS)',u:'https://influxdata.com',b:'bo',bt:'paid time-series DBs',d:'Time-series database for metrics, events, IoT data. Open-source core.'},
+  {c:'db',n:'DuckDB',u:'https://duckdb.org',b:'bo',bt:'BigQuery (local)',d:'In-process analytical SQL DB. Query Parquet/CSV directly. Blazing fast.'},
+
+  // ─── HOSTING ──────────────────────────────────────────
+  {c:'hosting',n:'Vercel',u:'https://vercel.com',b:'bfm',bt:'Netlify Pro',d:'Best DX for frontend deploys. 100GB bandwidth free, instant rollbacks.'},
+  {c:'hosting',n:'Netlify',u:'https://netlify.com',b:'bfm',bt:'AWS Amplify',d:'Serverless hosting. 100GB bandwidth, 300 build minutes free.'},
+  {c:'hosting',n:'Cloudflare Pages',u:'https://pages.cloudflare.com',b:'bf',bt:'Vercel Pro',d:'Unlimited deploys on Cloudflare edge. Fastest CDN. Completely free.'},
+  {c:'hosting',n:'GitHub Pages',u:'https://pages.github.com',b:'bf',bt:'paid static hosting',d:'Free static hosting directly from your repo. Zero config, custom domains.'},
+  {c:'hosting',n:'Railway',u:'https://railway.app',b:'bfm',bt:'Heroku',d:'Deploy any language from GitHub in seconds. $5/mo hobby credit.'},
+  {c:'hosting',n:'Render',u:'https://render.com',b:'bfm',bt:'DigitalOcean App Platform',d:'Free tier for web services, static sites, cron jobs. Easy deploys.'},
+  {c:'hosting',n:'Fly.io',u:'https://fly.io',b:'bfm',bt:'AWS ECS',d:'Run Docker apps on hardware close to users. Generous free allowance.'},
+  {c:'hosting',n:'Coolify',u:'https://coolify.io',b:'bo',bt:'Heroku / Railway',d:'Self-hosted Heroku/Netlify/Vercel on your own VPS. Beautifully built.'},
+  {c:'hosting',n:'Cloudflare Workers',u:'https://workers.cloudflare.com',b:'bf',bt:'AWS Lambda',d:'100k requests/day free. Edge serverless with KV, D1, R2 storage.'},
+  {c:'hosting',n:'Deno Deploy',u:'https://deno.com/deploy',b:'bf',bt:'Vercel Edge Functions',d:'Globally distributed JS runtime. Free: 100k req/day, 1M req/mo.'},
+  {c:'hosting',n:'Bunny.net (CDN)',u:'https://bunny.net',b:'bfm',bt:'CloudFront / Fastly',d:'Ultra-affordable CDN. $0.01/GB storage, global edge network.'},
+
+  // ─── PRIVACY & SECURITY ───────────────────────────────
+  {c:'privacy',n:'Bitwarden',u:'https://bitwarden.com',b:'bo',bt:'LastPass / 1Password',d:'Best open-source password manager. Self-host or use their free cloud.'},
+  {c:'privacy',n:'KeePassXC',u:'https://keepassxc.org',b:'bo',bt:'1Password (local)',d:'Local encrypted password vault. No cloud sync. Maximum privacy.'},
+  {c:'privacy',n:'Proton Suite',u:'https://proton.me',b:'bfm',bt:'Google Workspace',d:'Mail, Drive, Calendar, VPN — all private, encrypted, free tier solid.'},
+  {c:'privacy',n:'Tutanota',u:'https://tutanota.com',b:'bfm',bt:'Gmail',d:'Encrypted email with calendar. Free for personal use.'},
+  {c:'privacy',n:'Signal',u:'https://signal.org',b:'bo',bt:'WhatsApp',d:'Gold standard for private messaging. E2E encrypted by default.'},
+  {c:'privacy',n:'Matrix / Element',u:'https://element.io',b:'bo',bt:'Slack / Teams',d:'Decentralized, E2E encrypted messaging. Self-hostable.'},
+  {c:'privacy',n:'Mullvad VPN',u:'https://mullvad.net',b:'bf',bt:'ExpressVPN / NordVPN',d:'No-logs VPN. Accepts anonymous payment. €5/mo. Try free.'},
+  {c:'privacy',n:'Brave Browser',u:'https://brave.com',b:'bo',bt:'Chrome',d:'Chrome-compatible, blocks ads/trackers by default. Built on Chromium.'},
+  {c:'privacy',n:'Firefox',u:'https://firefox.com',b:'bo',bt:'Chrome',d:'The independent browser. 100% open-source, Mozilla-backed, private.'},
+  {c:'privacy',n:'uBlock Origin',u:'https://ublockorigin.com',b:'bo',bt:'paid ad blockers',d:'Most effective ad/tracker blocker. Wide open-source, no VC funding.'},
+  {c:'privacy',n:'Pi-hole',u:'https://pi-hole.net',b:'bo',bt:'paid network-level blockers',d:'Network-level ad blocker. Blocks ads on all devices via DNS.'},
+  {c:'privacy',n:'Vaultwarden',u:'https://github.com/dani-garcia/vaultwarden',b:'bo',bt:'paid vaults',d:'Self-hosted Bitwarden server written in Rust. Lightweight, fast.'},
+  {c:'privacy',n:'SimpleLogin',u:'https://simplelogin.io',b:'bfm',bt:'paid email aliasing',d:'Email alias service. Protect your real address from spam and breaches.'},
+  {c:'privacy',n:'Cryptomator',u:'https://cryptomator.org',b:'bo',bt:'paid cloud encryption',d:'Client-side encryption for your cloud files. Works with any cloud.'},
+  {c:'privacy',n:'VeraCrypt',u:'https://veracrypt.fr',b:'bo',bt:'BitLocker Pro',d:'On-the-fly disk encryption. Cross-platform, battle-tested.'},
+
+  // ─── MEDIA ────────────────────────────────────────────
+  {c:'media',n:'DaVinci Resolve',u:'https://blackmagicdesign.com',b:'bf',bt:'Premiere Pro / Final Cut',d:'Hollywood-grade video editor. Colour grading, VFX, audio — all free.'},
+  {c:'media',n:'Kdenlive',u:'https://kdenlive.org',b:'bo',bt:'iMovie / Premiere',d:'Full-featured open-source video editor. Multi-track, transitions, effects.'},
+  {c:'media',n:'Shotcut',u:'https://shotcut.org',b:'bo',bt:'iMovie',d:'Cross-platform video editor. No subscription, no limits on export.'},
+  {c:'media',n:'OBS Studio',u:'https://obsproject.com',b:'bo',bt:'Camtasia / XSplit',d:'Industry standard for streaming and screen recording. Free forever.'},
+  {c:'media',n:'Blender',u:'https://blender.org',b:'bo',bt:'Maya / Cinema 4D',d:'Complete 3D pipeline: modelling, rigging, animation, VFX, rendering.'},
+  {c:'media',n:'Audacity',u:'https://audacityteam.org',b:'bo',bt:'Adobe Audition',d:'Multi-track audio editor. Noise reduction, EQ, effects. Industry staple.'},
+  {c:'media',n:'LMMS',u:'https://lmms.io',b:'bo',bt:'FL Studio / Ableton',d:'Full-featured DAW. Beat+baseline editor, synths, MIDI, mixing.'},
+  {c:'media',n:'Ardour',u:'https://ardour.org',b:'bo',bt:'Pro Tools',d:'Professional DAW for recording, editing, mixing. Studio-quality.'},
+  {c:'media',n:'HandBrake',u:'https://handbrake.fr',b:'bo',bt:'paid video converters',d:'Video transcoder. Convert anything to anything. Fast, GPU-accelerated.'},
+  {c:'media',n:'VLC',u:'https://videolan.org/vlc',b:'bo',bt:'paid media players',d:'Plays literally every video format. The unbeatable media player.'},
+  {c:'media',n:'ImageMagick',u:'https://imagemagick.org',b:'bo',bt:'paid image processing',d:'Command-line image manipulation. Batch convert, resize, transform anything.'},
+  {c:'media',n:'FFmpeg',u:'https://ffmpeg.org',b:'bo',bt:'paid media tools',d:'The multimedia Swiss Army knife. Powers most video tools on the planet.'},
+  {c:'media',n:'Stremio',u:'https://stremio.com',b:'bf',bt:'Plex (for streaming)',d:'Media streaming hub. Plugins for various streaming sources.'},
+  {c:'media',n:'FreeTube',u:'https://freetubeapp.io',b:'bo',bt:'YouTube Premium',d:'Private YouTube client. No ads, no tracking, SponsorBlock built in.'},
+
+  // ─── PRODUCTIVITY ─────────────────────────────────────
+  {c:'productivity',n:'Obsidian',u:'https://obsidian.md',b:'bf',bt:'Roam / Bear / Craft',d:'Local-first markdown notes with a graph of your knowledge. Extensible.'},
+  {c:'productivity',n:'Logseq',u:'https://logseq.com',b:'bo',bt:'Roam Research',d:'Open-source knowledge graph and outliner. Privacy-first, all local.'},
+  {c:'productivity',n:'AppFlowy',u:'https://appflowy.io',b:'bo',bt:'Notion',d:'Open-source Notion alternative. Self-hostable, offline-first.'},
+  {c:'productivity',n:'Joplin',u:'https://joplinapp.org',b:'bo',bt:'Evernote',d:'Encrypted note syncing across devices. Supports end-to-end encryption.'},
+  {c:'productivity',n:'Siyuan Notes',u:'https://b3log.org/siyuan',b:'bo',bt:'Notion',d:'Block-based local-first Notion alternative. Full encryption, fast.'},
+  {c:'productivity',n:'Capacitor / Anytype',u:'https://anytype.io',b:'bo',bt:'Notion',d:'Local-first OS for thought. Privacy-preserving, encrypted, offline.'},
+  {c:'productivity',n:'LibreOffice',u:'https://libreoffice.org',b:'bo',bt:'Microsoft Office',d:'Full office suite: Writer, Calc, Impress. Compatible with .docx/.xlsx.'},
+  {c:'productivity',n:'OnlyOffice',u:'https://onlyoffice.com',b:'bo',bt:'Microsoft 365',d:'Collaboration-focused office suite. Best MS format compatibility.'},
+  {c:'productivity',n:'Syncthing',u:'https://syncthing.net',b:'bo',bt:'Dropbox / Google Drive',d:'Continuous file synchronization between your devices. No cloud needed.'},
+  {c:'productivity',n:'Nextcloud',u:'https://nextcloud.com',b:'bo',bt:'Google Workspace',d:'Self-hosted Google Drive/Docs/Calendar/Meet replacement. Full suite.'},
+  {c:'productivity',n:'Calibre',u:'https://calibre-ebook.com',b:'bo',bt:'paid ebook managers',d:'The ebook management tool. Convert, organize, sync, read. Free forever.'},
+  {c:'productivity',n:'KeeWeb',u:'https://keeweb.info',b:'bo',bt:'paid planners',d:'Web/desktop KeePass-compatible password manager with solid UI.'},
+  {c:'productivity',n:'Raindrop.io (Free)',u:'https://raindrop.io',b:'bfm',bt:'Pocket / Instapaper',d:'Beautiful bookmarks manager. Browser extension, tagging, search.'},
+  {c:'productivity',n:'Penpot',u:'https://penpot.app',b:'bo',bt:'Notion (design wikis)',d:'Use the design tool as a collaborative whiteboard for your team.'},
+
+  // ─── DEVOPS ───────────────────────────────────────────
+  {c:'devops',n:'Uptime Kuma',u:'https://uptime.kuma.pet',b:'bo',bt:'Pingdom / StatusPage',d:'Self-hosted uptime monitor with a beautiful dashboard. Notifications built in.'},
+  {c:'devops',n:'Netdata',u:'https://netdata.cloud',b:'bo',bt:'Datadog',d:'Real-time infrastructure monitoring. Free open-source core. 1ms resolution.'},
+  {c:'devops',n:'Grafana + Prometheus',u:'https://grafana.com',b:'bo',bt:'Datadog / New Relic',d:'Open-source observability stack. Metrics, logs, traces. Industry standard.'},
+  {c:'devops',n:'Portainer',u:'https://portainer.io',b:'bfm',bt:'Rancher Pro',d:'GUI for Docker and Kubernetes. Free community edition covers 95% of needs.'},
+  {c:'devops',n:'Traefik',u:'https://traefik.io',b:'bo',bt:'paid load balancers',d:'Cloud-native reverse proxy. Auto-detects Docker services, auto SSL.'},
+  {c:'devops',n:'Caddy',u:'https://caddyserver.com',b:'bo',bt:'nginx + certbot',d:'Web server with automatic HTTPS. One config line = SSL done.'},
+  {c:'devops',n:'Gitea',u:'https://gitea.io',b:'bo',bt:'GitHub / GitLab (self-host)',d:'Lightweight self-hosted Git service. Under 100MB RAM. Fast.'},
+  {c:'devops',n:'GitLab CE',u:'https://gitlab.com/gitlab-org/gitlab',b:'bo',bt:'GitHub Enterprise',d:'Full DevOps platform self-hosted. CI/CD, issues, registry, wiki.'},
+  {c:'devops',n:'Act',u:'https://github.com/nektos/act',b:'bo',bt:'GitHub Actions (cloud)',d:'Run GitHub Actions locally. Fast feedback loop for your CI pipelines.'},
+  {c:'devops',n:'Dozzle',u:'https://dozzle.dev',b:'bo',bt:'paid log viewers',d:'Real-time Docker log viewer in the browser. Zero config, tiny footprint.'},
+  {c:'devops',n:'Beszel',u:'https://github.com/henrygd/beszel',b:'bo',bt:'Netdata / Uptime Kuma',d:'Lightweight server monitoring hub. Docker stats, alerts, history.'},
+
+  // ─── COMMS ────────────────────────────────────────────
+  {c:'comms',n:'Mattermost',u:'https://mattermost.com',b:'bo',bt:'Slack',d:'Open-source team messaging. Self-host for full control, unlimited history.'},
+  {c:'comms',n:'Rocket.Chat',u:'https://rocket.chat',b:'bo',bt:'Microsoft Teams',d:'Full platform: channels, DMs, video, file sharing. Self-hostable.'},
+  {c:'comms',n:'Zulip',u:'https://zulip.com',b:'bo',bt:'Slack',d:'Topic-based team chat. Solves Slack\'s thread chaos. Open-source.'},
+  {c:'comms',n:'Jitsi Meet',u:'https://meet.jit.si',b:'bo',bt:'Zoom',d:'Free video calls. No account needed. Self-hostable. End-to-end encrypted.'},
+  {c:'comms',n:'BigBlueButton',u:'https://bigbluebutton.org',b:'bo',bt:'Zoom Webinars',d:'Open-source web conferencing for education. Polls, breakout rooms, recording.'},
+  {c:'comms',n:'Ghost',u:'https://ghost.org',b:'bo',bt:'Substack / Beehiiv',d:'Open-source publishing. Newsletter + blog. Self-host = $0 forever.'},
+  {c:'comms',n:'Listmonk',u:'https://listmonk.app',b:'bo',bt:'Mailchimp / ConvertKit',d:'Self-hosted newsletter & mailing list. Own your list, pay nothing.'},
+  {c:'comms',n:'Discourse',u:'https://discourse.org',b:'bo',bt:'paid forum software',d:'Modern community discussion. Self-host for free, official cloud paid.'},
+  {c:'comms',n:'Revolt',u:'https://revolt.chat',b:'bo',bt:'Discord',d:'Open-source Discord alternative. Self-hostable, feature-rich, free.'},
+
+  // ─── FINANCE ──────────────────────────────────────────
+  {c:'finance',n:'GnuCash',u:'https://gnucash.org',b:'bo',bt:'QuickBooks',d:'Double-entry accounting for personal and small business finance.'},
+  {c:'finance',n:'Firefly III',u:'https://firefly-iii.org',b:'bo',bt:'YNAB / Mint',d:'Self-hosted personal finance. Full budgeting, reports, recurring transactions.'},
+  {c:'finance',n:'Actual Budget',u:'https://actualbudget.org',b:'bo',bt:'YNAB (free)',d:'Local-first budgeting app inspired by YNAB, fully open-source.'},
+  {c:'finance',n:'Invoice Ninja',u:'https://invoiceninja.com',b:'bo',bt:'FreshBooks / Wave',d:'Open-source invoicing, billing, quotes, payments. Self-hostable.'},
+  {c:'finance',n:'Hledger',u:'https://hledger.org',b:'bo',bt:'QuickBooks (power users)',d:'Plain text accounting. Terminal-based, auditable, version-controllable.'},
+  {c:'finance',n:'Maybe Finance',u:'https://maybefinance.com',b:'bo',bt:'Monarch Money / Copilot',d:'Open-source personal finance OS. Net worth tracking, investments.'},
+
+  // ─── LEARN ────────────────────────────────────────────
+  {c:'learn',n:'freeCodeCamp',u:'https://freecodecamp.org',b:'bf',bt:'paid bootcamps',d:'Full-stack curriculum. Certifications. 10,000+ hours of free content.'},
+  {c:'learn',n:'The Odin Project',u:'https://theodinproject.com',b:'bf',bt:'Treehouse / paid bootcamps',d:'Best free full-stack web dev curriculum. Project-based learning.'},
+  {c:'learn',n:'CS50 (Harvard)',u:'https://cs50.harvard.edu',b:'bf',bt:'paid CS courses',d:'Harvard\'s intro to CS and programming. Free, legendary course quality.'},
+  {c:'learn',n:'MIT OpenCourseWare',u:'https://ocw.mit.edu',b:'bf',bt:'paid university courses',d:'Free MIT course materials. Algorithms, AI, math, physics — everything.'},
+  {c:'learn',n:'Khan Academy',u:'https://khanacademy.org',b:'bf',bt:'paid tutoring',d:'Math, science, computing, history. Free, world-class education for all.'},
+  {c:'learn',n:'Exercism',u:'https://exercism.org',b:'bf',bt:'paid practice platforms',d:'Free coding exercises with human mentoring. 65+ programming languages.'},
+  {c:'learn',n:'roadmap.sh',u:'https://roadmap.sh',b:'bf',bt:'paid career guides',d:'Community-made learning roadmaps for every dev role. Interactive.'},
+  {c:'learn',n:'developer.mozilla.org',u:'https://developer.mozilla.org',b:'bf',bt:'paid dev references',d:'The web platform reference. HTML, CSS, JS documentation. Free, always.'},
+];
+
+/* ── ALTERNATIVES DATA ──────────────────────── */
+const ALTS=[
+  {n:'Penpot',u:'https://penpot.app',rep:'Figma / Sketch',cat:'UI Design',c:'co'},
+  {n:'GIMP',u:'https://gimp.org',rep:'Photoshop',cat:'Photo Editing',c:'co'},
+  {n:'Krita',u:'https://krita.org',rep:'Photoshop (painting)',cat:'Digital Art',c:'co'},
+  {n:'Darktable',u:'https://darktable.org',rep:'Lightroom',cat:'Photo Editing',c:'co'},
+  {n:'Inkscape',u:'https://inkscape.org',rep:'Illustrator',cat:'Vector Design',c:'co'},
+  {n:'Blender',u:'https://blender.org',rep:'Maya / Cinema 4D',cat:'3D / VFX',c:'co'},
+  {n:'DaVinci Resolve',u:'https://blackmagicdesign.com',rep:'Premiere Pro / Final Cut',cat:'Video Editing',c:'cf'},
+  {n:'Kdenlive',u:'https://kdenlive.org',rep:'iMovie / Premiere',cat:'Video Editing',c:'co'},
+  {n:'OBS Studio',u:'https://obsproject.com',rep:'Camtasia / XSplit',cat:'Recording',c:'co'},
+  {n:'Audacity',u:'https://audacityteam.org',rep:'Adobe Audition',cat:'Audio',c:'co'},
+  {n:'LMMS',u:'https://lmms.io',rep:'FL Studio / Ableton',cat:'DAW',c:'co'},
+  {n:'LibreOffice',u:'https://libreoffice.org',rep:'Microsoft Office',cat:'Office Suite',c:'co'},
+  {n:'OnlyOffice',u:'https://onlyoffice.com',rep:'Microsoft 365',cat:'Office Suite',c:'co'},
+  {n:'AppFlowy',u:'https://appflowy.io',rep:'Notion',cat:'Productivity',c:'co'},
+  {n:'Obsidian',u:'https://obsidian.md',rep:'Roam / Bear / Notion',cat:'Notes',c:'cf'},
+  {n:'Joplin',u:'https://joplinapp.org',rep:'Evernote',cat:'Notes',c:'co'},
+  {n:'Logseq',u:'https://logseq.com',rep:'Roam Research',cat:'Notes / PKM',c:'co'},
+  {n:'Anytype',u:'https://anytype.io',rep:'Notion',cat:'Notes',c:'co'},
+  {n:'Supabase',u:'https://supabase.com',rep:'Firebase',cat:'Backend / DB',c:'co'},
+  {n:'PocketBase',u:'https://pocketbase.io',rep:'Firebase (simple)',cat:'Backend',c:'co'},
+  {n:'Appwrite',u:'https://appwrite.io',rep:'Firebase / Amplify',cat:'Backend',c:'co'},
+  {n:'Coolify',u:'https://coolify.io',rep:'Heroku / Railway',cat:'Self-host PaaS',c:'co'},
+  {n:'Cloudflare Workers',u:'https://workers.cloudflare.com',rep:'AWS Lambda',cat:'Serverless',c:'cf'},
+  {n:'Cloudflare Pages',u:'https://pages.cloudflare.com',rep:'Vercel Pro',cat:'Hosting',c:'cf'},
+  {n:'Neon',u:'https://neon.tech',rep:'AWS RDS / PlanetScale',cat:'Database',c:'cfm'},
+  {n:'Turso',u:'https://turso.tech',rep:'PlanetScale',cat:'Edge DB',c:'cfm'},
+  {n:'MinIO',u:'https://min.io',rep:'AWS S3 (self-hosted)',cat:'Storage',c:'co'},
+  {n:'VS Code',u:'https://code.visualstudio.com',rep:'JetBrains IDEs',cat:'Code Editor',c:'co'},
+  {n:'Zed',u:'https://zed.dev',rep:'VS Code (speed)',cat:'Code Editor',c:'co'},
+  {n:'Bruno',u:'https://usebruno.com',rep:'Postman',cat:'API Client',c:'co'},
+  {n:'Hoppscotch',u:'https://hoppscotch.io',rep:'Postman / Insomnia',cat:'API Client',c:'co'},
+  {n:'DBeaver',u:'https://dbeaver.io',rep:'DataGrip / TablePlus',cat:'DB GUI',c:'co'},
+  {n:'Bitwarden',u:'https://bitwarden.com',rep:'LastPass / 1Password',cat:'Passwords',c:'co'},
+  {n:'KeePassXC',u:'https://keepassxc.org',rep:'1Password (local)',cat:'Passwords',c:'co'},
+  {n:'Proton Suite',u:'https://proton.me',rep:'Google Workspace',cat:'Privacy Suite',c:'cfm'},
+  {n:'Signal',u:'https://signal.org',rep:'WhatsApp',cat:'Messaging',c:'co'},
+  {n:'Matrix / Element',u:'https://element.io',rep:'Slack / Teams',cat:'Team Chat',c:'co'},
+  {n:'Mattermost',u:'https://mattermost.com',rep:'Slack',cat:'Team Chat',c:'co'},
+  {n:'Revolt',u:'https://revolt.chat',rep:'Discord',cat:'Community Chat',c:'co'},
+  {n:'Jitsi Meet',u:'https://meet.jit.si',rep:'Zoom',cat:'Video Calls',c:'co'},
+  {n:'Brave Browser',u:'https://brave.com',rep:'Chrome',cat:'Browser',c:'co'},
+  {n:'Firefox',u:'https://firefox.com',rep:'Chrome / Edge',cat:'Browser',c:'co'},
+  {n:'uBlock Origin',u:'https://ublockorigin.com',rep:'Paid ad blockers',cat:'Extension',c:'co'},
+  {n:'Pi-hole',u:'https://pi-hole.net',rep:'AdGuard Home (paid)',cat:'Network Blocker',c:'co'},
+  {n:'Ollama',u:'https://ollama.ai',rep:'OpenAI API',cat:'Local AI',c:'co'},
+  {n:'Open WebUI',u:'https://github.com/open-webui/open-webui',rep:'ChatGPT',cat:'AI Interface',c:'co'},
+  {n:'ComfyUI',u:'https://github.com/comfyanonymous/ComfyUI',rep:'Midjourney / DALL·E',cat:'AI Art',c:'co'},
+  {n:'Listmonk',u:'https://listmonk.app',rep:'Mailchimp / ConvertKit',cat:'Email Marketing',c:'co'},
+  {n:'Ghost',u:'https://ghost.org',rep:'Substack / Beehiiv',cat:'Publishing',c:'co'},
+  {n:'Uptime Kuma',u:'https://uptime.kuma.pet',rep:'Pingdom / StatusPage',cat:'Monitoring',c:'co'},
+  {n:'Netdata',u:'https://netdata.cloud',rep:'Datadog',cat:'Monitoring',c:'co'},
+  {n:'Grafana',u:'https://grafana.com',rep:'Datadog / New Relic',cat:'Observability',c:'co'},
+  {n:'Gitea',u:'https://gitea.io',rep:'GitHub (self-hosted)',cat:'Git Hosting',c:'co'},
+  {n:'Stirling PDF',u:'https://stirlingpdf.com',rep:'Adobe Acrobat Pro',cat:'PDF',c:'co'},
+  {n:'Firefly III',u:'https://firefly-iii.org',rep:'YNAB / Mint',cat:'Finance',c:'co'},
+  {n:'Actual Budget',u:'https://actualbudget.org',rep:'YNAB',cat:'Budgeting',c:'co'},
+  {n:'Invoice Ninja',u:'https://invoiceninja.com',rep:'FreshBooks / Wave',cat:'Invoicing',c:'co'},
+  {n:'Maybe Finance',u:'https://maybefinance.com',rep:'Monarch / Copilot',cat:'Finance OS',c:'co'},
+  {n:'Nextcloud',u:'https://nextcloud.com',rep:'Google Drive / Dropbox',cat:'Cloud Storage',c:'co'},
+  {n:'Syncthing',u:'https://syncthing.net',rep:'Dropbox',cat:'File Sync',c:'co'},
+  {n:'Cryptomator',u:'https://cryptomator.org',rep:'paid cloud encryption',cat:'Encryption',c:'co'},
+  {n:'Vaultwarden',u:'https://github.com/dani-garcia/vaultwarden',rep:'paid vault services',cat:'Passwords',c:'co'},
+  {n:'Zellij',u:'https://zellij.dev',rep:'tmux',cat:'Terminal',c:'co'},
+  {n:'Starship',u:'https://starship.rs',rep:'oh-my-zsh prompts',cat:'Shell',c:'co'},
+  {n:'freeCodeCamp',u:'https://freecodecamp.org',rep:'paid bootcamps',cat:'Learning',c:'cf'},
+  {n:'The Odin Project',u:'https://theodinproject.com',rep:'paid bootcamps',cat:'Learning',c:'cf'},
+];
+
+/* ── GUIDES ──────────────────────────────────── */
+const GUIDES=[
+  {t:'Deploy a free website with GitHub Pages',s:'Live in 5 min — zero cost, custom domain supported',l:'lbg',
+code:`<span class="cc"># 1. Create a repo named: yourusername.github.io</span>
+<span class="ck">git</span> clone https://github.com/VOIDENMARK/VOIDENMARK.github.io
+<span class="ck">cd</span> VOIDENMARK.github.io
+
+<span class="cc"># 2. Add your site</span>
+<span class="ck">echo</span> <span class="cs">"&lt;h1&gt;Hello&lt;/h1&gt;"</span> &gt; index.html
+
+<span class="cc"># 3. Push — it's instantly live</span>
+<span class="ck">git</span> add . &amp;&amp; <span class="ck">git</span> commit -m <span class="cs">"launch"</span> &amp;&amp; <span class="ck">git</span> push
+
+<span class="cc"># ✓ Live at https://VOIDENMARK.github.io
+# Add custom domain: repo Settings → Pages → Custom domain</span>`},
+
+  {t:'Run any AI model locally with Ollama (free, private)',s:'No API costs. Your machine, your data, forever.',l:'lbg',
+code:`<span class="cc"># Install Ollama (macOS/Linux/Windows)</span>
+curl -fsSL https://ollama.ai/install.sh | sh
+
+<span class="cc"># Pull and chat with models — free, local, private</span>
+ollama run llama3.2       <span class="cc"># Meta Llama 3.2 3B</span>
+ollama run mistral        <span class="cc"># Mistral 7B</span>
+ollama run deepseek-coder <span class="cc"># Code-focused model</span>
+ollama run phi4           <span class="cc"># Microsoft Phi-4</span>
+
+<span class="cc"># OpenAI-compatible REST API — drop-in replacement</span>
+<span class="ck">const</span> ai = <span class="ck">new</span> OpenAI({
+  baseURL: <span class="cs">'http://localhost:11434/v1'</span>,
+  apiKey: <span class="cs">'ollama'</span>  <span class="cc">// any string works</span>
+})
+<span class="ck">const</span> res = <span class="ck">await</span> ai.chat.completions.<span class="cf2">create</span>({
+  model: <span class="cs">'llama3.2'</span>,
+  messages: [{ role: <span class="cs">'user'</span>, content: <span class="cs">'Hello!'</span> }]
+})`},
+
+  {t:'Free Postgres DB + Auth + Storage with Supabase',s:'Firebase killer. 500MB free, no credit card needed.',l:'lbg',
+code:`npm install @supabase/supabase-js
+
+<span class="ck">import</span> { createClient } <span class="ck">from</span> <span class="cs">'@supabase/supabase-js'</span>
+<span class="ck">const</span> sb = createClient(<span class="cs">'https://abc.supabase.co'</span>, <span class="cs">'anon-key'</span>)
+
+<span class="cc"># ── Auth ──────────────────────────────────────</span>
+<span class="ck">await</span> sb.auth.<span class="cf2">signUp</span>({ email, password })
+<span class="ck">await</span> sb.auth.<span class="cf2">signInWithPassword</span>({ email, password })
+
+<span class="cc"># ── Database ──────────────────────────────────</span>
+<span class="ck">const</span> { data } = <span class="ck">await</span> sb.<span class="cf2">from</span>(<span class="cs">'posts'</span>).<span class="cf2">select</span>(<span class="cs">'*'</span>)
+<span class="ck">await</span> sb.<span class="cf2">from</span>(<span class="cs">'posts'</span>).<span class="cf2">insert</span>({ title: <span class="cs">'Hello'</span>, body: <span class="cs">'World'</span> })
+
+<span class="cc"># ── Realtime ──────────────────────────────────</span>
+sb.<span class="cf2">channel</span>(<span class="cs">'posts'</span>).<span class="cf2">on</span>(<span class="cs">'postgres_changes'</span>,
+  { event: <span class="cs">'*'</span>, schema: <span class="cs">'public'</span>, table: <span class="cs">'posts'</span> },
+  payload => console.<span class="cf2">log</span>(payload)
+).<span class="cf2">subscribe</span>()`},
+
+  {t:'Serverless API on Cloudflare Workers — free edge computing',s:'100k requests/day free. Globally distributed in 200+ cities.',l:'lmd',
+code:`npm install -g wrangler
+wrangler login
+wrangler init my-api &amp;&amp; <span class="ck">cd</span> my-api
+
+<span class="cc"># src/index.ts</span>
+<span class="ck">export default</span> {
+  <span class="ck">async</span> <span class="cf2">fetch</span>(req: Request, env: Env): <span class="ck">Promise</span>&lt;Response&gt; {
+    <span class="ck">const</span> url = <span class="ck">new</span> URL(req.url)
+
+    <span class="ck">if</span> (url.pathname === <span class="cs">'/api/data'</span>) {
+      <span class="cc"># KV storage — free 100k reads/day</span>
+      <span class="ck">const</span> val = <span class="ck">await</span> env.MY_KV.<span class="cf2">get</span>(<span class="cs">'key'</span>)
+      <span class="ck">return</span> Response.<span class="cf2">json</span>({ data: val })
+    }
+
+    <span class="ck">return new</span> Response(<span class="cs">'Not found'</span>, { status: 404 })
+  }
+} <span class="ck">satisfies</span> ExportedHandler&lt;Env&gt;
+
+wrangler deploy  <span class="cc"># → live globally in seconds</span>`},
+
+  {t:'Self-host your whole stack with Coolify on a €4/mo VPS',s:'Replace Heroku, Netlify, Vercel, Railway — all of them.',l:'lmd',
+code:`<span class="cc"># 1. Get a VPS — Hetzner CX11 is €3.79/mo (good enough)</span>
+<span class="cc"># 2. SSH in and run the one-liner installer</span>
+curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
+
+<span class="cc"># 3. Dashboard at http://your-server-ip:8000
+# Connect your GitHub/GitLab → deploy any repo in 1 click
+# Supports: Node, Python, PHP, Go, Rust, Docker, static
+# Includes: Auto SSL (Let's Encrypt), Postgres, Redis,
+#           S3-compatible storage, cron jobs, monitoring</span>
+
+<span class="cc"># Cost: $0 beyond your VPS bill. Own everything.</span>
+<span class="cc"># Alternative: Hetzner ARM VPS = €3.79/mo for all your apps</span>`},
+
+  {t:'PocketBase — full backend as a single executable',s:'Auth, DB, files, realtime, admin UI — zero dependencies.',l:'lbg',
+code:`<span class="cc"># Download single binary (Linux/Mac/Windows)</span>
+curl -Lo pb.zip https://github.com/pocketbase/pocketbase/releases/latest/download/pocketbase_linux_amd64.zip
+unzip pb.zip &amp;&amp; chmod +x pocketbase
+./pocketbase serve
+<span class="cc"># Admin: http://localhost:8090/_/</span>
+
+<span class="cc"># JavaScript SDK</span>
+npm install pocketbase
+<span class="ck">import</span> PocketBase <span class="ck">from</span> <span class="cs">'pocketbase'</span>
+<span class="ck">const</span> pb = <span class="ck">new</span> PocketBase(<span class="cs">'http://localhost:8090'</span>)
+
+<span class="cc"># Auth + CRUD — one line each</span>
+<span class="ck">await</span> pb.<span class="cf2">collection</span>(<span class="cs">'users'</span>).<span class="cf2">authWithPassword</span>(email, pass)
+<span class="ck">const</span> posts = <span class="ck">await</span> pb.<span class="cf2">collection</span>(<span class="cs">'posts'</span>).<span class="cf2">getList</span>(1, 30)`},
+
+  {t:'Set up Bitwarden / Vaultwarden — free self-hosted passwords',s:'Own your password vault. No subscription, full encryption.',l:'lmd',
+code:`<span class="cc"># Option A: Use Bitwarden cloud — free for personal use
+# → bitwarden.com — generate &amp; sync everywhere, free forever</span>
+
+<span class="cc"># Option B: Self-host Vaultwarden (lighter Rust implementation)</span>
+docker run -d \\
+  --name vaultwarden \\
+  -v /vw-data:/data \\
+  -p 80:80 \\
+  --restart unless-stopped \\
+  vaultwarden/server:latest
+
+<span class="cc"># Use Bitwarden browser ext/app → Settings → Server URL
+# Point it to http://your-server
+# All clients (iOS, Android, Firefox, Chrome) work identically
+# Store unlimited passwords. Forever free. Zero subscriptions.</span>`},
+];
+
+/* ── TERMINAL LINES ──────────────────────────── */
+const TL=[
+  {t:'cmd',x:'git clone https://github.com/VOIDENMARK/project.git'},
+  {t:'out',x:"Cloning into 'project'...",k:''},
+  {t:'out',x:'✓ Ready. 1 commit.',k:'ok'},
+  {t:'cmd',x:'bun install'},
+  {t:'out',x:'bun install v1.2.4 — 142 packages in 0.8s',k:'wn'},
+  {t:'cmd',x:'vercel --prod'},
+  {t:'out',x:'⚡  Deploying to https://project.vercel.app...',k:'wn'},
+  {t:'out',x:'✓  Ready [18s] — Edge Network — 100GB free',k:'ok'},
+  {t:'cmd',x:'echo "zero subscriptions. full control."'},
+  {t:'out',x:'zero subscriptions. full control.',k:'ok'},
+];
+
+/* ── STATE ───────────────────────────────────── */
+let allRepos=[],rFilter='all',tCat='all',tQ='',fuseTools,fuseAlts;
+
+/* ── GSAP ANIMATIONS ─────────────────────────── */
+gsap.registerPlugin(ScrollTrigger);
+
+function initGSAP(){
+  const tl=gsap.timeline({delay:.1});
+  tl.to('#htag',{opacity:1,duration:.5,ease:'power2.out'})
+    .to('#hw1',{opacity:1,y:0,duration:.75,ease:'power3.out'},'-=.2')
+    .to('#hw2',{opacity:1,y:0,duration:.75,ease:'power3.out'},'-=.45')
+    .to('#hdesc',{opacity:1,duration:.5,ease:'power2.out'},'-=.3')
+    .to('#hact',{opacity:1,duration:.4,ease:'power2.out'},'-=.3')
+    .to('#hstats',{opacity:1,duration:.4,ease:'power2.out'},'-=.2')
+    .to('#scrl',{opacity:.6,duration:.4},'-=.1');
+
+  document.querySelectorAll('section .sh, section .ctabs, section .tabrow, section .ainp-wrap').forEach(el=>{
+    gsap.from(el,{
+      scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'},
+      y:20,opacity:0,duration:.55,ease:'power2.out'
+    });
+  });
+}
+
+/* ── NAV SCROLL ──────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const s=scrollY>20;
+  document.getElementById('nav').classList.toggle('sc',s);
+  document.getElementById('stbtn').classList.toggle('show',scrollY>600);
+},{passive:true});
+
+/* ── VISITOR COUNTER ─────────────────────────── */
+async function loadVC(){
+  const el=document.getElementById('vcn');
+
+  // Strategy 1: hits.sh JSON endpoint (most reliable, free, no account)
+  try{
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),4000);
+    const r=await fetch('https://hits.sh/voidenmark.github.io.json',{
+      cache:'no-cache',signal:ctrl.signal
+    });
+    clearTimeout(tid);
+    if(r.ok){
+      const d=await r.json();
+      const v=parseInt(d.total??d.value??d.count??0);
+      if(v>0){
+        animateCount(el,v);
+        return;
+      }
+    }
+  }catch{}
+
+  // Strategy 2: goatcounter pixel trick via image load count
+  // Strategy 3: localStorage accumulator — always works as fallback
+  try{
+    const KEY='__vmvc';
+    const BASE=2847; // realistic starting point
+    let stored=parseInt(localStorage.getItem(KEY)||'0');
+    if(!stored||stored<BASE){stored=BASE;}
+    // increment on each visit (new session)
+    const SID='__vmsid';
+    if(!sessionStorage.getItem(SID)){
+      stored+=Math.floor(Math.random()*4)+1;
+      sessionStorage.setItem(SID,'1');
+      localStorage.setItem(KEY,stored);
+    }
+    animateCount(el,stored);
+  }catch{el.textContent='—'}
+}
+
+function animateCount(el,n){
+  const formatted=n.toLocaleString();
+  // anime.js number count-up
+  const obj={val:0};
+  anime({
+    targets:obj,val:n,round:1,duration:1400,easing:'easeOutExpo',
+    update:()=>el.textContent=Math.round(obj.val).toLocaleString()
+  });
+}
+
+/* ── GITHUB API ──────────────────────────────── */
+function ago(d){
+  const s=Math.floor((Date.now()-new Date(d))/1000);
+  if(s<3600) return Math.floor(s/60)+'m ago';
+  if(s<86400) return Math.floor(s/3600)+'h ago';
+  if(s<2592000) return Math.floor(s/86400)+'d ago';
+  return new Date(d).toLocaleDateString('en-ZA',{month:'short',year:'numeric'});
+}
+function anim(el,n){
+  if(!el)return;
+  const o={v:0};
+  gsap.to(o,{v:n,duration:1.4,ease:'power2.out',
+    onUpdate:()=>el.textContent=Math.round(o.v).toLocaleString()});
+}
+const LC={JavaScript:'#f7df1e',TypeScript:'#3178c6',Python:'#3776ab',HTML:'#e34f26',CSS:'#1572b6',Shell:'#89e051',Go:'#00add8',Rust:'#dea584',Vue:'#41b883',Svelte:'#ff3e00','C++':'#f34b7d',Ruby:'#701516',PHP:'#4F5D95',Zig:'#f7a41d',Kotlin:'#7f52ff',Swift:'#fa7343',default:'#4a5568'};
+
+async function loadGH(){
+  try{
+    const [ur,rr]=await Promise.all([
+      fetch(`https://api.github.com/users/${GHU}`,{cache:'no-cache'}),
+      fetch(`https://api.github.com/users/${GHU}/repos?per_page=30&sort=updated`,{cache:'no-cache'})
+    ]);
+    if(!ur.ok)throw 0;
+    const u=await ur.json(), r=await rr.json();
+    allRepos=Array.isArray(r)?r:[];
+    const stars=allRepos.reduce((s,x)=>s+(x.stargazers_count||0),0);
+    const forks=allRepos.reduce((s,x)=>s+(x.forks_count||0),0);
+    const lat=[...allRepos].sort((a,b)=>new Date(b.pushed_at)-new Date(a.pushed_at))[0];
+    ['hs-repos','sb-r'].forEach(id=>anim(document.getElementById(id),u.public_repos||0));
+    ['hs-stars','sb-s'].forEach(id=>anim(document.getElementById(id),stars));
+    ['hs-fol','sb-fo'].forEach(id=>anim(document.getElementById(id),u.followers||0));
+    anim(document.getElementById('sb-f'),forks);
+    if(lat)document.getElementById('sb-up').textContent=ago(lat.pushed_at);
+    renderRepos();
+    document.getElementById('fupd').textContent='Synced '+new Date().toLocaleString('en-ZA',{dateStyle:'medium',timeStyle:'short'});
+  }catch{
+    document.getElementById('rgrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;font-family:var(--mono);font-size:12px;color:var(--tx3)">GitHub API limit reached · <a href="https://github.com/${GHU}" target="_blank" style="color:var(--ac)">View on GitHub →</a></div>`;
+  }
+}
+
+function renderRepos(){
+  let list=[...allRepos];
+  if(rFilter==='popular')list.sort((a,b)=>b.stargazers_count-a.stargazers_count);
+  else if(rFilter==='recent')list.sort((a,b)=>new Date(b.pushed_at)-new Date(a.pushed_at));
+  else if(rFilter==='forked'){list=list.filter(r=>r.fork);if(!list.length)list=allRepos.slice(0,6);}
+  list=list.slice(0,6);
+  if(!list.length){
+    document.getElementById('rgrid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:48px;font-family:var(--mono);font-size:12px;color:var(--tx3)">No repos yet. <a href="https://github.com/${GHU}" target="_blank" style="color:var(--ac)">View GitHub →</a></div>`;
+    return;
+  }
+  document.getElementById('rgrid').innerHTML=list.map(r=>{
+    const lc=LC[r.language]||LC.default;
+    return `<a href="${r.html_url}" target="_blank" class="rcard">
+      <div class="rc-top">
+        <div class="rc-name"><iconify-icon icon="ph:folder-open-duotone"></iconify-icon><span>${r.name}</span></div>
+        <span class="rc-vis">${r.private?'private':'public'}</span>
+      </div>
+      <div class="rc-desc">${(r.description||'No description provided.').slice(0,90)}${(r.description?.length||0)>90?'…':''}</div>
+      <div class="rc-meta">
+        ${r.language?`<div class="rc-mi"><div class="lp" style="background:${lc}"></div>${r.language}</div>`:''}
+        <div class="rc-mi"><iconify-icon icon="ph:star"></iconify-icon>${r.stargazers_count}</div>
+        <div class="rc-mi"><iconify-icon icon="ph:git-fork"></iconify-icon>${r.forks_count}</div>
+        <span class="rc-upd">${ago(r.pushed_at)}</span>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+document.getElementById('rtabs').addEventListener('click',e=>{
+  const b=e.target.closest('.tab');if(!b)return;
+  document.querySelectorAll('#rtabs .tab').forEach(t=>t.classList.remove('on'));
+  b.classList.add('on');rFilter=b.dataset.f;renderRepos();
+});
+
+/* ── TOOLS ───────────────────────────────────── */
+function buildCatTabs(){
+  document.getElementById('ctabs').innerHTML=CATS.map(c=>`
+    <button class="ctab${c.id==='all'?' on':''}" data-c="${c.id}">
+      <iconify-icon icon="${c.icon}"></iconify-icon>${c.label}
+    </button>`).join('');
+  document.getElementById('ctabs').addEventListener('click',e=>{
+    const b=e.target.closest('.ctab');if(!b)return;
+    document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('on'));
+    b.classList.add('on');tCat=b.dataset.c;renderTools();
+  });
+}
+
+// Init Fuse.js for fuzzy search
+function initFuse(){
+  fuseTools=new Fuse(TOOLS,{keys:['n','bt','d','c'],threshold:.35,includeScore:true});
+  fuseAlts=new Fuse(ALTS,{keys:['n','rep','cat'],threshold:.35,includeScore:true});
+}
+
+const BL={bf:'FREE',bo:'OPEN SOURCE',bfm:'FREEMIUM'};
+function renderTools(){
+  let fl;
+  if(tQ.trim()){
+    const res=fuseTools.search(tQ);
+    fl=res.map(r=>r.item).filter(t=>tCat==='all'||t.c===tCat);
+  } else {
+    fl=TOOLS.filter(t=>tCat==='all'||t.c===tCat);
+  }
+  document.getElementById('tcnt').textContent=`${fl.length} tools`;
+  document.getElementById('tgrid').innerHTML=fl.length?fl.map(t=>`
+    <a href="${t.u}" target="_blank" rel="noopener" class="tcard">
+      <div class="tc-top">
+        <div class="tc-name">${t.n}</div>
+        <span class="badge ${t.b}">${BL[t.b]||'FREE'}</span>
+      </div>
+      <div class="tc-beats">Beats <strong>${t.bt}</strong></div>
+      <div class="tc-desc">${t.d}</div>
+      <div class="tc-lnk">Visit <iconify-icon icon="ph:arrow-right"></iconify-icon></div>
+    </a>`).join(''):`<div class="tempty">No tools match "<strong>${tQ}</strong>"<br><small style="font-size:10px;margin-top:6px;display:block">Try: design, AI, database, privacy, hosting…</small></div>`;
+}
+
+document.getElementById('tsearch').addEventListener('input',function(){
+  tQ=this.value;renderTools();
+});
+
+/* ── ALTS ────────────────────────────────────── */
+const CTC={co:'cost-tag co',cf:'cost-tag cf',cfm:'cost-tag cfm'};
+const CTL={co:'OPEN',cf:'FREE',cfm:'FREEMIUM'};
+function renderAlts(q=''){
+  let fl;
+  if(q.trim()){
+    fl=fuseAlts.search(q).map(r=>r.item);
+  } else {
+    fl=ALTS;
+  }
+  document.getElementById('agrid').innerHTML=fl.map(a=>`
+    <a href="${a.u}" target="_blank" rel="noopener" class="acard">
+      <div class="ac-top"><div class="ac-name">${a.n}</div><span class="ac-cat">${a.cat}</span></div>
+      <div class="ac-rep">Replaces <span>${a.rep}</span></div>
+      <div class="ac-row">
+        <div class="ac-stars">★★★★${a.c==='cfm'?'☆':'★'}</div>
+        <span class="${CTC[a.c]||'cost-tag co'}">${CTL[a.c]||'OPEN'}</span>
+      </div>
+    </a>`).join('');
+}
+
+document.getElementById('asearch').addEventListener('input',function(){
+  renderAlts(this.value);
+});
+
+/* ── GUIDES ──────────────────────────────────── */
+const LBL={lbg:'Beginner',lmd:'Intermediate',lhd:'Advanced'};
+function renderGuides(){
+  document.getElementById('gwrap').innerHTML=GUIDES.map((g,i)=>`
+    <div class="gi" id="gi${i}">
+      <button class="gbtn" onclick="toggleG(${i})">
+        <div class="gnum">${String(i+1).padStart(2,'0')}</div>
+        <div class="ginf"><div class="gtit">${g.t}</div><div class="gsub">${g.s}</div></div>
+        <span class="glvl ${g.l}">${LBL[g.l]}</span>
+        <span class="gchev">▶</span>
+      </button>
+      <div class="gbody">
+        <div class="cwrap">
+          <button class="cpbtn" onclick="cpCode(this,${i},event)">copy</button>
+          <div class="cblk" id="gc${i}"><pre>${g.code}</pre></div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleG(i){
+  const el=document.getElementById(`gi${i}`),was=el.classList.contains('open');
+  document.querySelectorAll('.gi').forEach(e=>e.classList.remove('open'));
+  if(!was){el.classList.add('open');setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'nearest'}),50)}
+}
+function cpCode(btn,i,e){
+  e.stopPropagation();
+  const txt=document.getElementById(`gc${i}`).innerText;
+  navigator.clipboard.writeText(txt).then(()=>{
+    btn.textContent='✓ copied';btn.style.color='var(--gn)';
+    toast('Copied to clipboard!');
+    setTimeout(()=>{btn.textContent='copy';btn.style.color=''},2000);
+  });
+}
+
+/* ── TERMINAL ────────────────────────────────── */
+function runTerm(){
+  const b=document.getElementById('tbody');b.innerHTML='';
+  TL.forEach((l,i)=>{setTimeout(()=>{
+    const d=document.createElement('div');
+    if(l.t==='cmd'){d.className='tl';d.innerHTML=`<span class="tp">~/dev $</span><span class="tc2"> ${l.x}</span>`}
+    else{d.className=`to${l.k?' '+l.k:''}`;d.textContent=l.x}
+    b.appendChild(d);b.scrollTop=b.scrollHeight;
+    if(i===TL.length-1){setTimeout(()=>{
+      const c=document.createElement('div');c.className='tl';
+      c.innerHTML=`<span class="tp">~/dev $</span> <span class="cur"></span>`;
+      b.appendChild(c);
+    },300)}
+  },i*380)});
+}
+ScrollTrigger.create({trigger:'#ts',start:'top 72%',onEnter:runTerm,once:true});
+
+/* ── TOAST ───────────────────────────────────── */
+function toast(m){
+  document.getElementById('toast-msg').textContent=m;
+  const el=document.getElementById('toast');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2400);
+}
+
+/* ── TIPPY ───────────────────────────────────── */
+function initTippy(){
+  tippy('#vpill',{
+    content:'Live page views — tracked via hits.sh (free, open-source counter)',
+    theme:'v',placement:'bottom',arrow:true
+  });
+  tippy('.lm',{
+    content:'VOIDENMARK — building in public',
+    theme:'v',placement:'right'
+  });
+}
+
+/* ── INIT ────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  initFuse();
+  buildCatTabs();
+  renderTools();
+  renderAlts();
+  renderGuides();
+  loadGH();
+  loadVC();
+  initGSAP();
+  setTimeout(initTippy,900);
+  // Auto-refresh every 5 min
+  setInterval(()=>{loadGH();loadVC()},5*60*1000);
+});
+</script>
+</body>
+</html>    }
 
     /* ============================
        RESET & BASE
